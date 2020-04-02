@@ -1,6 +1,3 @@
-Unit 8: Group Milestone - README
-===
-
 # Tutor Finder
 
 ## Table of Contents
@@ -89,10 +86,42 @@ A tool to help students find tutors and tutors to connect with students.
 ### [BONUS] Interactive Prototype
 
 ## Schema 
-[This section will be completed in Unit 9]
 ### Models
-[Add table of models]
+#### Profile
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the user profile |
+   | name          | String   | user's name 
+   | subjects      | String   | stores user's subjects |
+   | image         | File     | user's profile image|
+   | description   | String   | user's description for profile |
+   | rating        | Number   | average rating given by their students/tutors |
+   | isTutor       | Boolean  | defines whether user is tutor or student |
+   | contact       | String   | user's contact information |
+   
+#### Chat
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | person | Pointer| the person that the user is talking to |
+   | name | String | name of the person talking to |
+   | image | File | profile image of that person
+   | text | String | the messages sent back and forth 
+   | time | Time | the time a message is sent
+   
 ### Networking
-- [Add list of network requests by screen ]
-- [Create basic snippets for each Parse network request]
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
+  - Tutor Feed Screen
+      - (Read/GET) Query all profiles where user is tutor
+      - (Update/PUT) Query tutors matching search filters
+  - User Profile Screen
+      - (Read/GET) Query logged in user object
+      - (Update/PUT) Update user profile image
+      - (Update/PUT) Update user information/description
+  - Tutor Detail Screen
+      - (Read/GET) Query selected tutor object
+  - Chat Feed Screen
+      - (Read/GET) Query all chats the user is having
+      - (Create/POST) Start sending message to a user for the first time
+  - Chat Detail Screen
+      - (Read/GET) Query all the messages between the user and another one
+      - (Create/POST) Send a new message 
