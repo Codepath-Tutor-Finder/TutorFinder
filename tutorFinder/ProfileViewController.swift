@@ -7,20 +7,16 @@
 //
 
 import UIKit
+import Parse
 
 class ProfileViewController: UIViewController {
 
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var ageLabel: UILabel!
+    @IBOutlet weak var roleLabel: UILabel!
     @IBOutlet weak var schoolLabel: UILabel!
     @IBOutlet weak var userInfoLabel: UILabel!
-    @IBOutlet weak var ageField: UITextField!
-    @IBOutlet weak var schoolField: UITextField!
-    @IBOutlet weak var userInfoField: UITextField!
-    
-    @IBAction func onUpdateButton(_ sender: Any) {
-    }
+    @IBOutlet weak var aboutLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
