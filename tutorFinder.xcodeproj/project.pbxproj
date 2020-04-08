@@ -20,6 +20,7 @@
 		394317E4243D602E00FAD335 /* TutorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394317E3243D602E00FAD335 /* TutorCell.swift */; };
 		394317E6243D618400FAD335 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394317E5243D618400FAD335 /* LoginViewController.swift */; };
 		394317EA243D6A2E00FAD335 /* CameraRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394317E9243D6A2E00FAD335 /* CameraRegistrationViewController.swift */; };
+		394317EC243D9E3B00FAD335 /* TutorDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394317EB243D9E3B00FAD335 /* TutorDetailsViewController.swift */; };
 		43DD0C945D1EA4BBC92EF60D /* Pods_tutorFinder_tutorFinderUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3E433AF8C5B708B2A3B51F /* Pods_tutorFinder_tutorFinderUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,7 @@
 		394317E3243D602E00FAD335 /* TutorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorCell.swift; sourceTree = "<group>"; };
 		394317E5243D618400FAD335 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		394317E9243D6A2E00FAD335 /* CameraRegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraRegistrationViewController.swift; sourceTree = "<group>"; };
+		394317EB243D9E3B00FAD335 /* TutorDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorDetailsViewController.swift; sourceTree = "<group>"; };
 		3A70431088170BEF6C361FE2 /* Pods_tutorFinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tutorFinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A3E433AF8C5B708B2A3B51F /* Pods_tutorFinder_tutorFinderUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tutorFinder_tutorFinderUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D3F83F974C2D7DA0A41F7E /* Pods-tutorFinderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tutorFinderTests.release.xcconfig"; path = "Target Support Files/Pods-tutorFinderTests/Pods-tutorFinderTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				394317B1243D490A00FAD335 /* AppDelegate.swift */,
 				394317B3243D490A00FAD335 /* SceneDelegate.swift */,
 				394317B7243D490A00FAD335 /* Main.storyboard */,
+				394317EB243D9E3B00FAD335 /* TutorDetailsViewController.swift */,
 				394317E9243D6A2E00FAD335 /* CameraRegistrationViewController.swift */,
 				394317E5243D618400FAD335 /* LoginViewController.swift */,
 				394317E3243D602E00FAD335 /* TutorCell.swift */,
@@ -422,6 +425,7 @@
 				394317E2243D5FB900FAD335 /* TableViewController.swift in Sources */,
 				394317E6243D618400FAD335 /* LoginViewController.swift in Sources */,
 				394317B4243D490A00FAD335 /* SceneDelegate.swift in Sources */,
+				394317EC243D9E3B00FAD335 /* TutorDetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
