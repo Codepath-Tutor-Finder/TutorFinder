@@ -132,3 +132,5 @@ Here are gifs showing the current progress:
 - TableView that lists all the users
 - Searchbar to filter tableView of users
 - UserDetailsView appears when you click on a user's cell
+- User Profile
+<img src='http://g.recordit.co/kJNp2Bvnb0.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
