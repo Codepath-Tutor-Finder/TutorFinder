@@ -57,6 +57,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
             self.searchBar.showsCancelButton = true
+        self.tableView.reloadData()
+            
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
             searchBar.showsCancelButton = false
