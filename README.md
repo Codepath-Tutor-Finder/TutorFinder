@@ -26,17 +26,17 @@ A tool to help students find tutors and tutors to connect with students.
 
 * [x] Sign in
 * [x] Register
-* List of tutors
-* More information
+* [ ] List of tutors
+* [ ]More information
 * [x] Profiles
 * ...
 
 **Optional Nice-to-have Stories**
 
-* Rating System
-* Filtering
-* Chats
-* Map
+* [ ]Rating System
+* [ ]Filtering
+* [x] Chats
+* [ ]Map
 * ...
 
 ### 2. Screen Archetypes
@@ -134,3 +134,4 @@ Here are gifs showing the current progress:
 - UserDetailsView appears when you click on a user's cell
 - User Profile
 <img src='http://g.recordit.co/kJNp2Bvnb0.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://g.recordit.co/MgLqeAs5Yl.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
