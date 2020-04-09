@@ -125,3 +125,10 @@ A tool to help students find tutors and tutors to connect with students.
   - Chat Detail Screen
       - (Read/GET) Query all the messages between the user and another one
       - (Create/POST) Send a new message 
+### Video Walkthrough(s)
+Here are gifs showing the current progress:
+<img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+- Signup/Login screen
+- TableView that lists all the users
+- Searchbar to filter tableView of users
+- UserDetailsView appears when you click on a user's cell
