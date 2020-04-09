@@ -127,7 +127,7 @@ A tool to help students find tutors and tutors to connect with students.
       - (Create/POST) Send a new message 
 ### Video Walkthrough(s)
 Here are gifs showing the current progress:
-<img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://g.recordit.co/VWuhlMgXfF.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 - Signup/Login screen
 - TableView that lists all the users
 - Searchbar to filter tableView of users
