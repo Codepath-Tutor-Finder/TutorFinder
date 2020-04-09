@@ -126,12 +126,7 @@ A tool to help students find tutors and tutors to connect with students.
       - (Read/GET) Query all the messages between the user and another one
       - (Create/POST) Send a new message 
 ### Video Walkthrough(s)
-Here are gifs showing the current progress:
+- Here are gifs showing the current progress:
 <img src='http://g.recordit.co/VWuhlMgXfF.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-- Signup/Login screen
-- TableView that lists all the users
-- Searchbar to filter tableView of users
-- UserDetailsView appears when you click on a user's cell
-- User Profile
 <img src='http://g.recordit.co/kJNp2Bvnb0.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 <img src='http://g.recordit.co/MgLqeAs5Yl.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
