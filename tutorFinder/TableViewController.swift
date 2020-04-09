@@ -17,7 +17,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return profiles.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TutorCell") as! TutorCell
         let profile = profiles[indexPath.row]
         
@@ -83,5 +84,13 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         tableView.reloadData()
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        let profile = profiles[indexPath.row]
+        let detailsViewConroller = segue.destination as! TutorDetailsViewController
+        detailsViewConroller.profile = profile
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
