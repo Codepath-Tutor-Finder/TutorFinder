@@ -24,20 +24,20 @@ A tool to help students find tutors and tutors to connect with students.
 
 **Required Must-have Stories**
 
-* [x] Sign in
-* [x] Register
-* [ ] List of tutors
-* [ ]More information
-* [x] Profiles
-* ...
+[x] Sign in
+[x] Register
+[ ] List of tutors
+[ ]More information
+[x] Profiles
+...
 
 **Optional Nice-to-have Stories**
 
-* [ ]Rating System
-* [ ]Filtering
-* [x] Chats
-* [ ]Map
-* ...
+[ ]Rating System
+[ ]Filtering
+[x] Chats
+[ ]Map
+...
 
 ### 2. Screen Archetypes
 
