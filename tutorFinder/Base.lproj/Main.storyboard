@@ -406,6 +406,7 @@
         <image name="person" catalog="system" width="64" height="58"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="02c-WU-OOp"/>
         <segue reference="K49-Z8-vbZ"/>
         <segue reference="Q4b-Sq-8Wd"/>
     </inferredMetricsTieBreakers>

@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import AlamofireImage
 
-class TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     var profiles = [PFObject]()
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,18 +40,48 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let query = PFQuery(className: "Profiles")
-        query.limit = 20
+        query.limit = 100
         query.findObjectsInBackground { (profiles, error) in
             if profiles != nil {
                 self.profiles = profiles!
                 self.tableView.reloadData()
             }
         }
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+            self.searchBar.showsCancelButton = true
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            searchBar.showsCancelButton = false
+            searchBar.text = ""
+            searchBar.resignFirstResponder()
+            let query = PFQuery(className: "Profiles")
+            query.findObjectsInBackground { (profiles, error) in
+                if profiles != nil {
+                    self.profiles = profiles!
+                    self.tableView.reloadData()
+                }
+            }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("searching now")
+        let query1 = PFQuery(className:"Profiles")
+        query1.whereKey("name", contains: searchText)
+        // add another query here that has subjects being searched
+        let query = PFQuery.orQuery(withSubqueries: [query1])
+        query.findObjectsInBackground { (profiles,error) in
+            if profiles != nil {
+                self.profiles = profiles!
+            }
+        }
+        tableView.reloadData()
     }
     
 }
