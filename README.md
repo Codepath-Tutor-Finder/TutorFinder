@@ -24,11 +24,11 @@ A tool to help students find tutors and tutors to connect with students.
 
 **Required Must-have Stories**
 
-* Sign in
-* Register
+* [x] Sign in
+* [x] Register
 * List of tutors
 * More information
-* Profiles
+* [x] Profiles
 * ...
 
 **Optional Nice-to-have Stories**
