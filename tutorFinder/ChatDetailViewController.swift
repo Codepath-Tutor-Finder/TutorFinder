@@ -11,20 +11,11 @@ import AlamofireImage
 import Parse
 
 class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
-    class Message {
-        let user : String
-        let message : String
-        init (user: String, message: String) {
-            self.user = user
-            self.message = message
-        }
-    }
     
-    let user = "Bill"
-    let tutor = "Tutor 1"
-    var messages = [Message(user: "Tutor", message: "My name is Tutor 1"),
-                    Message(user: "Tutor", message: "I'm currently enrolled in MMG 201.")]
+    var currentUser = PFUser()
+    var otherUser = PFUser()
+    var currentChat = PFObject()
+    var messages = [PFObject]()
     
     @IBOutlet weak var textField: UITextField!
     
@@ -41,11 +32,29 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         conversationTable.separatorStyle = .none
         
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        conversationTable.estimatedRowHeight = 150
-//        conversationTable.rowHeight = UITableView.automaticDimension
-//    }
+
+    func loadMessages() {
+        // Create a query
+        let query = PFQuery(className: "Chats")
+        
+        // Retrieve Chat (only one) whereKey "users" include currentUser and otherUser
+        query.whereKey("users", containsAllObjectsIn:[currentUser, otherUser])
+        query.order(byDescending: "createdAt")
+        query.limit = 20
+
+        // Retrieve the Chat
+        query.findObjectsInBackground { (chat, error) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                self.currentChat = chat![0]
+                let messagesArray = self.currentChat["messages"] as! [PFObject]
+                let sliceArray = messagesArray.suffix(20)
+                self.messages = Array(sliceArray)
+            }
+            
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
@@ -55,8 +64,11 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = conversationTable.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageCellTableViewCell
         let cellMessage = messages[indexPath.row]
-        cell.user.text = cellMessage.user
-        cell.message.text = cellMessage.message
+        let sender = cellMessage["sender"] as! PFUser
+        let message = cellMessage["message"] as! String
+        
+        cell.user.text = sender.username
+        cell.message.text = message
         
         cell.bubbleView.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
         cell.bubbleView.layer.cornerRadius = 16
@@ -64,10 +76,11 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.bubbleView.sizeToFit()
         cell.bubbleView.layoutIfNeeded()
         
-        if cell.user.text == user {
+        if currentUser == sender {
             cell.user.textAlignment = .right
             cell.message.textAlignment = .right
         }
+        
         return cell
     }
     
@@ -78,9 +91,21 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     @IBAction func onSendMessage(_ sender: Any) {
-        if let message = textField.text {
-            messages.append(Message(user: user, message: message))
-            textField.text = ""
+        if textField.text != nil {
+            let message = PFObject(className: "Message")
+            message["sender"] = currentUser
+            message["receiver"] = otherUser
+            message["message"] = textField.text
+            currentChat["lastMessage"] = textField.text
+            currentChat.add(message, forKey: "messages")
+            currentChat.saveInBackground { (success, error) in
+                if success {
+                    print("Message saved")
+                } else {
+                    print("Error saving message")
+                }
+            }
+            textField.text = nil
             conversationTable.reloadData()
         }
     }
