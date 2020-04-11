@@ -35,10 +35,17 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         conversationTable.delegate = self
         conversationTable.dataSource = self
         
-        //conversationTable.estimatedRowHeight = 100
-        //conversationTable.rowHeight = UITableView.automaticDimension
-        conversationTable.rowHeight = 100
+//        conversationTable.estimatedRowHeight = 150
+//        conversationTable.rowHeight = UITableView.automaticDimension
+        conversationTable.rowHeight = 130
+        conversationTable.separatorStyle = .none
+        
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        conversationTable.estimatedRowHeight = 150
+//        conversationTable.rowHeight = UITableView.automaticDimension
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
@@ -48,11 +55,20 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = conversationTable.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageCellTableViewCell
         let cellMessage = messages[indexPath.row]
-        cell.message.text = cellMessage.message
         cell.user.text = cellMessage.user
+        cell.message.text = cellMessage.message
         
+        cell.bubbleView.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
+        cell.bubbleView.layer.cornerRadius = 16
+        cell.bubbleView.clipsToBounds = true
+        cell.bubbleView.sizeToFit()
+        cell.bubbleView.layoutIfNeeded()
+        
+        if cell.user.text == user {
+            cell.user.textAlignment = .right
+            cell.message.textAlignment = .right
+        }
         return cell
-        
     }
     
     @IBAction func onReturn(_ sender: Any) {

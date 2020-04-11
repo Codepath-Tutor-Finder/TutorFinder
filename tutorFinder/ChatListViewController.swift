@@ -10,7 +10,7 @@ import UIKit
 import AlamofireImage
 import Parse
 
-class ChatListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ChatListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     class Chat {
         let user : String
@@ -23,13 +23,27 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
     var tutors = [Chat(user: "Tutor 1", message: "I'm currently enrolled in MMG 201."),
                   Chat(user: "Tutor 2", message: "Tuesday and Thursday work best for me."),
                   Chat(user: "Tutor 3", message: "Sounds like a good plan.")]
+    
+//    var data = [String]()
+//    var filterData = [String]()
+    
     @IBOutlet weak var chatTable: UITableView!
+    @IBOutlet weak var chatSearchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         chatTable.delegate = self
         chatTable.dataSource = self
-        // Do any additional setup after loading the view.
+        chatSearchBar.delegate = self
+        
+        
+//        for tutor in tutors {
+//            data.append(tutor.user)
+//        }
+//
+//        chatTable.register(ChatCellTableViewCell.self, forCellReuseIdentifier: "ChatCell")
+//        chatTable.tableFooterView = UIView()
+//        filterData = data
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -44,7 +58,14 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         
         return cell
     }
-
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+    }
     /*
     // MARK: - Navigation
 
