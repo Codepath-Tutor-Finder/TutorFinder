@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlamofireImage
+import Parse
 
 class ChatListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
