@@ -10,6 +10,10 @@
 		25DB1B8F243E529B00DE305C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25DB1B8E243E529B00DE305C /* ProfileViewController.swift */; };
 		25DB1B91243E66F300DE305C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25DB1B90243E66F300DE305C /* CameraViewController.swift */; };
 		2B9BFE8A4CFDF1D48CACA74D /* Pods_tutorFinderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8261A8FEC24BEB60BEF61493 /* Pods_tutorFinderTests.framework */; };
+		2FFBF1332441972600B57901 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBF1322441972600B57901 /* ChatListViewController.swift */; };
+		2FFBF1352441975D00B57901 /* ChatCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBF1342441975D00B57901 /* ChatCellTableViewCell.swift */; };
+		2FFBF1372441981B00B57901 /* ChatDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBF1362441981B00B57901 /* ChatDetailViewController.swift */; };
+		2FFBF1392441985C00B57901 /* MessageCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBF1382441985C00B57901 /* MessageCellTableViewCell.swift */; };
 		30852A94BFF0B3C7481BAB27 /* Pods_tutorFinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A70431088170BEF6C361FE2 /* Pods_tutorFinder.framework */; };
 		394317B2243D490A00FAD335 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394317B1243D490A00FAD335 /* AppDelegate.swift */; };
 		394317B4243D490A00FAD335 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394317B3243D490A00FAD335 /* SceneDelegate.swift */; };
@@ -45,6 +49,10 @@
 /* Begin PBXFileReference section */
 		25DB1B8E243E529B00DE305C /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		25DB1B90243E66F300DE305C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		2FFBF1322441972600B57901 /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
+		2FFBF1342441975D00B57901 /* ChatCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCellTableViewCell.swift; sourceTree = "<group>"; };
+		2FFBF1362441981B00B57901 /* ChatDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailViewController.swift; sourceTree = "<group>"; };
+		2FFBF1382441985C00B57901 /* MessageCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellTableViewCell.swift; sourceTree = "<group>"; };
 		355421612B5E4EFB80630608 /* Pods-tutorFinder-tutorFinderUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tutorFinder-tutorFinderUITests.debug.xcconfig"; path = "Target Support Files/Pods-tutorFinder-tutorFinderUITests/Pods-tutorFinder-tutorFinderUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		394317AE243D490A00FAD335 /* tutorFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tutorFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		394317B1243D490A00FAD335 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -151,6 +159,10 @@
 				394317E1243D5FB900FAD335 /* TableViewController.swift */,
 				25DB1B8E243E529B00DE305C /* ProfileViewController.swift */,
 				25DB1B90243E66F300DE305C /* CameraViewController.swift */,
+				2FFBF1322441972600B57901 /* ChatListViewController.swift */,
+				2FFBF1342441975D00B57901 /* ChatCellTableViewCell.swift */,
+				2FFBF1362441981B00B57901 /* ChatDetailViewController.swift */,
+				2FFBF1382441985C00B57901 /* MessageCellTableViewCell.swift */,
 			);
 			path = tutorFinder;
 			sourceTree = "<group>";
@@ -422,12 +434,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FFBF1372441981B00B57901 /* ChatDetailViewController.swift in Sources */,
+				2FFBF1392441985C00B57901 /* MessageCellTableViewCell.swift in Sources */,
 				394317EA243D6A2E00FAD335 /* CameraRegistrationViewController.swift in Sources */,
 				394317E4243D602E00FAD335 /* TutorCell.swift in Sources */,
 				394317B2243D490A00FAD335 /* AppDelegate.swift in Sources */,
 				394317E2243D5FB900FAD335 /* TableViewController.swift in Sources */,
 				25DB1B8F243E529B00DE305C /* ProfileViewController.swift in Sources */,
+				2FFBF1352441975D00B57901 /* ChatCellTableViewCell.swift in Sources */,
 				25DB1B91243E66F300DE305C /* CameraViewController.swift in Sources */,
+				2FFBF1332441972600B57901 /* ChatListViewController.swift in Sources */,
 				394317E6243D618400FAD335 /* LoginViewController.swift in Sources */,
 				394317B4243D490A00FAD335 /* SceneDelegate.swift in Sources */,
 			);
