@@ -75,6 +75,15 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print("searching now")
+        let predicate = NSPredicate(format: "searchText BETWEEN name OR searchText BETWEEN description")
+        let query = PFQuery(className: "Profiles", predicate: predicate)
+        query.order(byDescending: "name")
+        query.findObjectsInBackground { (profiles,error) in
+            if profiles != nil {
+                self.profiles = profiles!
+            }
+        /*
+        // uses PFQuery instead of Predicates to search, couldn't figure out how to use this correctly
         let query1 = PFQuery(className:"Profiles")
         let query2 = PFQuery(className:"Profiles")
         let query3 = PFQuery(className:"Profiles")
@@ -83,12 +92,15 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         query3.whereKey("contactEmail", contains: searchText)
         // add another query here that has subjects being searched
         let query = PFQuery.orQuery(withSubqueries: [query1])
+        query.order(byDescending: "name")
         query.findObjectsInBackground { (profiles,error) in
             if profiles != nil {
                 self.profiles = profiles!
             }
+        }*/
+            self.tableView.reloadData()
         }
-        tableView.reloadData()
+        
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
