@@ -163,8 +163,8 @@
 				25DB1B8E243E529B00DE305C /* ProfileViewController.swift */,
 				25DB1B90243E66F300DE305C /* CameraViewController.swift */,
 				2FFBF1322441972600B57901 /* ChatListViewController.swift */,
-				2FFBF1342441975D00B57901 /* ChatCellTableViewCell.swift */,
 				2FFBF1362441981B00B57901 /* ChatDetailViewController.swift */,
+				2FFBF1342441975D00B57901 /* ChatCellTableViewCell.swift */,
 				2FFBF1382441985C00B57901 /* MessageCellTableViewCell.swift */,
 			);
 			path = tutorFinder;
