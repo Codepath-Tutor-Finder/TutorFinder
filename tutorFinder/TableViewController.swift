@@ -60,17 +60,26 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
             searchBar.text = ""
             searchBar.resignFirstResponder()
+        let query = PFQuery(className: "Profiles")
+        query.limit = 100
+        query.order(byAscending: "name")
+        query.findObjectsInBackground { (profiles, error) in
+            if profiles != nil {
+                self.profiles = profiles!
+                self.tableView.reloadData()
+            }
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.searchBar.resignFirstResponder()
         let nameQuery = PFQuery(className: "Profiles")
-        nameQuery.whereKey("name", equalTo: searchBar.text)
+        nameQuery.whereKey("name", contains: searchBar.text!)
         
-        /*let descQuery = PFQuery(className: "Profiles")
-        nameQuery.whereKey("description", matchesText: searchBar.text!)*/
+        let descQuery = PFQuery(className: "Profiles")
+        descQuery.whereKey("description", contains: searchBar.text!)
         
-        let query = PFQuery.orQuery(withSubqueries: [nameQuery])
+        let query = PFQuery.orQuery(withSubqueries: [nameQuery, descQuery])
         query.findObjectsInBackground { (profiles,error) in
             if error != nil {
                 print("error")
