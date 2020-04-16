@@ -28,6 +28,7 @@ class TutorDetailsViewController: UIViewController {
         profileImageView.af_setImage(withURL: url)
         // Do any additional setup after loading the view.
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         /*let query = PFQuery(className:"Profiles")
