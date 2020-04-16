@@ -13,6 +13,7 @@ import AlamofireImage
 class TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     var profiles = [PFObject]()
+    var allProfiles = [PFObject]()
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return profiles.count
     }
@@ -48,6 +49,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidAppear(animated)
         let query = PFQuery(className: "Profiles")
         query.limit = 100
+        query.order(byAscending: "name")
         query.findObjectsInBackground { (profiles, error) in
             if profiles != nil {
                 self.profiles = profiles!
@@ -55,52 +57,33 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-            self.searchBar.showsCancelButton = true
-        self.tableView.reloadData()
-            
-    }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-            searchBar.showsCancelButton = false
             searchBar.text = ""
             searchBar.resignFirstResponder()
-            let query = PFQuery(className: "Profiles")
-            query.findObjectsInBackground { (profiles, error) in
-                if profiles != nil {
-                    self.profiles = profiles!
-                    self.tableView.reloadData()
-                }
-            }
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("searching now")
-        let predicate = NSPredicate(format: "searchText BETWEEN name OR searchText BETWEEN description")
-        let query = PFQuery(className: "Profiles", predicate: predicate)
-        query.order(byDescending: "name")
-        query.findObjectsInBackground { (profiles,error) in
-            if profiles != nil {
-                self.profiles = profiles!
-            }
-        /*
-        // uses PFQuery instead of Predicates to search, couldn't figure out how to use this correctly
-        let query1 = PFQuery(className:"Profiles")
-        let query2 = PFQuery(className:"Profiles")
-        let query3 = PFQuery(className:"Profiles")
-        query1.whereKey("name", contains: searchText)
-        query2.whereKey("description", contains: searchText)
-        query3.whereKey("contactEmail", contains: searchText)
-        // add another query here that has subjects being searched
-        let query = PFQuery.orQuery(withSubqueries: [query1])
-        query.order(byDescending: "name")
-        query.findObjectsInBackground { (profiles,error) in
-            if profiles != nil {
-                self.profiles = profiles!
-            }
-        }*/
-            self.tableView.reloadData()
-        }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.resignFirstResponder()
+        let nameQuery = PFQuery(className: "Profiles")
+        nameQuery.whereKey("name", equalTo: searchBar.text)
         
+        /*let descQuery = PFQuery(className: "Profiles")
+        nameQuery.whereKey("description", matchesText: searchBar.text!)*/
+        
+        let query = PFQuery.orQuery(withSubqueries: [nameQuery])
+        query.findObjectsInBackground { (profiles,error) in
+            if error != nil {
+                print("error")
+            }
+            if let objects = profiles
+            {
+                print(objects.count)
+                self.profiles = objects
+                self.tableView.reloadData()
+            }
+        }
+        self.searchBar.resignFirstResponder()
+        self.tableView.reloadData()
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
