@@ -25,6 +25,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         chatTable.delegate = self
         chatTable.dataSource = self
         chatSearchBar.delegate = self
+        self.loadChats()
         
     }
     
