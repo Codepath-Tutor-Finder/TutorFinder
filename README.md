@@ -26,8 +26,8 @@ A tool to help students find tutors and tutors to connect with students.
 
 * [x] Sign in
 * [x] Register
-* List of tutors
-* More information
+* [x] List of tutors
+* [x] More information
 * [x] Profiles
 * ...
 
@@ -127,6 +127,4 @@ A tool to help students find tutors and tutors to connect with students.
       - (Create/POST) Send a new message 
 ### Video Walkthrough(s)
 - Here are gifs showing the current progress:
-<img src='http://g.recordit.co/VWuhlMgXfF.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-<img src='http://g.recordit.co/kJNp2Bvnb0.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-<img src='http://g.recordit.co/MgLqeAs5Yl.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://g.recordit.co/CaH5KKUN2z.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
