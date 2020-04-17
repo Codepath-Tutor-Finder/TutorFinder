@@ -22,6 +22,7 @@ class TutorDetailsViewController: UIViewController {
         super.viewDidLoad()
         nameLabel.text = profile["name"] as? String
         descriptionLabel.text = profile["description"] as? String
+        contactLabel.text = profile["contactEmail"] as? String
         let imageFile = profile["profilePic"] as! PFFileObject
         let urlString = imageFile.url!
         let url = URL(string: urlString)!

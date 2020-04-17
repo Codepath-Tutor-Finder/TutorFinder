@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="g3t-OC-gDP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="g3t-OC-gDP">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -463,7 +463,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gpD-Zh-NBe">
-
                                 <rect key="frame" x="30" y="587" width="285" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="4HK-HU-dQm"/>
@@ -471,10 +470,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                          
                             <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vAw-yz-Hcb">
                                 <rect key="frame" x="325" y="587" width="40" height="50"/>
-
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="A9I-Sf-gHz"/>
                                 </constraints>
@@ -575,8 +572,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KMr-gc-0hc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-
-            <point key="canvasLocation" x="6176.8000000000002" y="104.7976011994003"/>
+            <point key="canvasLocation" x="6231" y="-377"/>
         </scene>
         <!--Chat-->
         <scene sceneID="JiH-9s-Uf2">
@@ -645,13 +641,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="153"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XWk-Wo-PJK">
-                                                    <rect key="frame" x="10" y="10" width="0.0" height="133"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="XWk-Wo-PJK" secondAttribute="height" multiplier="1:1" id="V88-HI-MXg"/>
-                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="ciz-th-njx"/>
-                                                    </constraints>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="This is a sample description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WuF-Mx-9sn">
                                                     <rect key="frame" x="151" y="44" width="216" height="99"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
@@ -664,6 +653,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XWk-Wo-PJK">
+                                                    <rect key="frame" x="15" y="11" width="128" height="133"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="XWk-Wo-PJK" secondAttribute="height" multiplier="1:1" id="V88-HI-MXg"/>
+                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="ciz-th-njx"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="XWk-Wo-PJK" firstAttribute="leading" secondItem="1zg-gd-MZm" secondAttribute="leading" constant="10" id="I4R-z0-SMz"/>
@@ -683,7 +679,7 @@
                                         <connections>
                                             <outlet property="descLabel" destination="WuF-Mx-9sn" id="zvO-6Y-Mec"/>
                                             <outlet property="nameLabel" destination="5N0-BK-aDG" id="4J4-1n-DHA"/>
-                                            <outlet property="profileImage" destination="XWk-Wo-PJK" id="0nV-GH-9wH"/>
+                                            <outlet property="profileImage" destination="XWk-Wo-PJK" id="mgM-Lw-ljf"/>
                                             <segue destination="vfu-TD-sTe" kind="show" id="4Rc-o4-bSy"/>
                                         </connections>
                                     </tableViewCell>
@@ -712,7 +708,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tjF-1z-pch">
-                                <rect key="frame" x="16" y="63" width="149" height="149"/>
+                                <rect key="frame" x="16" y="63" width="122" height="122"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Udb-1P-7Nx">
@@ -768,12 +764,12 @@
                         <outlet property="contactLabel" destination="ixA-wq-gjJ" id="0gr-iN-khT"/>
                         <outlet property="descriptionLabel" destination="uzO-5Y-nyO" id="92O-y8-3Lb"/>
                         <outlet property="nameLabel" destination="Udb-1P-7Nx" id="Iqg-jl-L07"/>
-                        <outlet property="profileImageView" destination="tjF-1z-pch" id="oLR-ce-YNt"/>
+                        <outlet property="profileImageView" destination="tjF-1z-pch" id="lUt-VL-7oU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3GL-nr-s1M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4385" y="107"/>
+            <point key="canvasLocation" x="4384.8000000000002" y="106.59670164917542"/>
         </scene>
         <!--Search-->
         <scene sceneID="1gd-3D-2iG">
@@ -798,15 +794,14 @@
             <point key="canvasLocation" x="2568.8000000000002" y="108.39580209895054"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="magnifyingglass" catalog="system" width="64" height="56"/>
-        <image name="paperplane.fill" catalog="system" width="64" height="60"/>
-        <image name="person" catalog="system" width="64" height="58"/>
-        <image name="person.circle.fill" catalog="system" width="64" height="60"/>
-        <image name="person.fill" catalog="system" width="64" height="60"/>
-        <image name="return" catalog="system" width="64" height="50"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="K49-Z8-vbZ"/>
     </inferredMetricsTieBreakers>
+    <resources>
+        <image name="paperplane.fill" catalog="system" width="128" height="121"/>
+        <image name="person" catalog="system" width="128" height="117"/>
+        <image name="person.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="person.fill" catalog="system" width="128" height="120"/>
+        <image name="return" catalog="system" width="128" height="101"/>
+    </resources>
 </document>
