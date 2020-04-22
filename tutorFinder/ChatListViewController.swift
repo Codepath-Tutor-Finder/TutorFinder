@@ -84,7 +84,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             
         } else {
             let chat = filteredChats[indexPath.row]
-            let otherUser = filteredUsers[indexPath.row]
+            otherUser = filteredUsers[indexPath.row]
             message = chat["message"] as! String
         }
         
