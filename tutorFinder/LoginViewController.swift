@@ -31,6 +31,7 @@ class LoginViewController: UIViewController {
     */
 
     @IBAction func onSignUp(_ sender: Any) {
+        /*
         let user = PFUser()
         user.username = usernameField.text
         user.password = passwordField.text
@@ -43,8 +44,15 @@ class LoginViewController: UIViewController {
                 print("Error: \(error?.localizedDescription)")
             }
         }
+        */
+        self.performSegue(withIdentifier: "signUpSegue", sender: nil)
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var vc = segue.destination as! CameraRegistrationViewController
+        vc.username = usernameField.text!
+        vc.password = passwordField.text!
+        
+    }
     @IBAction func onSignIn(_ sender: Any) {
         let username = usernameField.text!
         let password = passwordField.text!

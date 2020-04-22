@@ -17,14 +17,29 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
     @IBOutlet weak var roleSegmentedControl: UISegmentedControl!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var imageView: UIImageView!
+    
+    var username = ""
+    var password = ""
+    var selectedSubjects = [""]
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
     
 
     @IBAction func onSubmitButton(_ sender: Any) {
+        let user = PFUser()
+        user.username = username
+        user.password = password
+        
+        user.signUpInBackground { (success,error) in
+            if success {
+                print("User was signed up success")
+            }
+            else{
+                print("Error: \(error?.localizedDescription ?? "didn't sign up")")
+            }
+        }
         let profile = PFObject(className: "Profiles")
         profile["name"] = nameField.text!
         profile["description"] = descriptionField.text!
@@ -71,6 +86,9 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
         present(picker, animated: true, completion: nil)
     }
     
+    @IBAction func onSubjectButton(_ sender: Any) {
+        self.performSegue(withIdentifier: "subjectChooseSegue", sender: nil)
+    }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.editedImage] as! UIImage
         let size = CGSize(width: 300, height: 300)
