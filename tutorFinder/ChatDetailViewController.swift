@@ -14,8 +14,12 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var currentUser = PFUser()
     var otherUser = PFUser()
+    
     var currentChat = PFObject()
     var messages = [PFObject]()
+    
+    var currentUsername = String()
+    var otherUsername = String()
     
     @IBOutlet weak var textField: UITextField!
     
@@ -39,6 +43,7 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         
         // Retrieve Chat (only one) whereKey "users" include currentUser and otherUser
         query.whereKey("users", containsAllObjectsIn:[currentUser, otherUser])
+        query.includeKey("messages")
         query.order(byDescending: "createdAt")
         query.limit = 20
 
@@ -69,6 +74,12 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         let message = cellMessage["message"] as! String
         
         cell.user.text = sender.username
+        if sender == currentUser {
+            cell.user.text = currentUsername
+        } else {
+             cell.user.text = otherUsername
+        }
+        
         cell.message.text = message
         
         cell.bubbleView.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)

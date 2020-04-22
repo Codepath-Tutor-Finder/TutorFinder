@@ -16,6 +16,8 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
     var otherUsers = [PFUser]()
     
     var chats = [PFObject]()
+    var filteredChats = [PFObject]()
+    var filteredUsers = [PFUser]()
     
     @IBOutlet weak var chatTable: UITableView!
     @IBOutlet weak var chatSearchBar: UISearchBar!
@@ -54,23 +56,37 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                 print(self.chats)
             }
         }
+        chatTable.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chats.count
+        if chatSearchBar.text == "" {
+            return chats.count
+        } else {
+            return filteredChats.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatTable.dequeueReusableCell(withIdentifier: "ChatCell") as! ChatCellTableViewCell
-        let chat = chats[indexPath.row]
-        let users = chat["users"] as! [PFUser]
         var otherUser = PFUser()
-        if users[0] != currentUser {
-            otherUser = users[0]
+        var message = ""
+        if chatSearchBar.text == "" {
+            let chat = chats[indexPath.row]
+            let users = chat["users"] as! [PFUser]
+            message = chat["lastMessage"] as! String
+            if users[0] != currentUser {
+                otherUser = users[0]
+            } else {
+                otherUser = users[1]
+            }
+            otherUsers.append(otherUser)
+            
         } else {
-            otherUser = users[1]
+            let chat = filteredChats[indexPath.row]
+            let otherUser = filteredUsers[indexPath.row]
+            message = chat["message"] as! String
         }
-        otherUsers.append(otherUser)
         
         let query = PFQuery(className: "Profiles")
         query.whereKey("author", equalTo: otherUser)
@@ -82,25 +98,102 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                 let url = URL(string: urlString)
                 cell.userImage.af_setImage(withURL: url!)
                 
-                cell.userName.text = profile["name"] as? String ?? "Username"
+                cell.userName.text = (profile["name"] as! String)
             }
             
         }
         
-        cell.message.text = (chat["lastMessage"] as! String)
+        cell.message.text = message
         return cell
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        filteredChats = [PFObject]()
+        filteredUsers = [PFUser]()
         
+        searchBar.endEditing(true)
+        chatTable.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if let keyword = searchBar.text {
+            
+            // Grab PFUser with "name" matched keyword
+            let profileQuery = PFQuery(className:"Profiles")
+            profileQuery.whereKey("name", contains: keyword)
+            profileQuery.includeKey("author")
+            
+            profileQuery.findObjectsInBackground { (profiles, error) in
+                if let profiles = profiles {
+                    for profile in profiles {
+                        let otherUser = profile["author"] as! PFUser
+                        self.otherUsers.append(otherUser)
+                    }
+                } else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
         
+            // Grab Chats with otherUser included in "users"
+            let chatQuery = PFQuery(className: "Chats")
+            chatQuery.whereKey("user", containedIn: otherUsers)
+            chatQuery.includeKey("lastMessage")
+            chatQuery.limit = 5
+            
+            chatQuery.findObjectsInBackground { (chats, error) in
+                if let chats = chats {
+                    for chat in chats {
+                        let message = chat["lastMessage"] as! PFObject
+                        self.filteredChats.append(message)
+                        
+                        let sender = message["sender"] as! PFUser
+                        let receiver = message["receiver"] as! PFUser
+                        
+                        if sender == self.currentUser {
+                            self.filteredUsers.append(receiver)
+                        } else {
+                            self.filteredUsers.append(sender)
+                        }
+                    }
+                    
+                } else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+            
+            // Grab Message with "message" mathced keyword
+            let messageQuery = PFQuery(className: "Messages")
+            messageQuery.whereKey("message", contains: keyword)
+            messageQuery.limit = 5
+            messageQuery.findObjectsInBackground { (messages, error) in
+                if let messages = messages {
+                    for message in messages {
+                        self.filteredChats.append(message)
+                    }
+                } else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+            
+            chatTable.reloadData()
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let otherUser = otherUsers[indexPath.row]
+        var otherUser = PFUser()
+        
+        if chatSearchBar.text == "" {
+            otherUser = otherUsers[indexPath.row]
+        } else {
+            let message = filteredChats[indexPath.row]
+            let users = message["users"] as! [PFUser]
+            if users[0] == currentUser {
+                otherUser = users[1]
+            } else {
+                otherUser = users[0]
+            }
+        }
         
         let selectedVC = ChatDetailViewController()
         
