@@ -38,7 +38,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         let query = PFQuery(className: "Chats")
         
         // Retrieve chats whereKey "users" include currentUser and otherUser
-        query.whereKey("users", containsAllObjectsIn:[currentUser])
+        query.whereKey("users", containsAllObjectsIn:[currentUser!])
         query.order(byDescending: "updatedAt")
         query.limit = 20
         
@@ -64,17 +64,30 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = chatTable.dequeueReusableCell(withIdentifier: "ChatCell") as! ChatCellTableViewCell
         let chat = chats[indexPath.row]
         let users = chat["users"] as! [PFUser]
+        var otherUser = PFUser()
         if users[0] != currentUser {
-            let otherUser = users[0]
-            cell.userName.text = otherUser.username
-            
+            otherUser = users[0]
         } else {
-            let otherUser = users[1]
-            cell.userName.text = otherUser.username
-            otherUsers.append(otherUser)
+            otherUser = users[1]
+        }
+        otherUsers.append(otherUser)
+        
+        let query = PFQuery(className: "Profiles")
+        query.whereKey("author", equalTo: otherUser)
+        query.findObjectsInBackground { (profiles, error) in
+            if profiles != nil {
+                let profile = profiles![0]
+                let imageFile = profile["profilePic"] as! PFFileObject
+                let urlString = imageFile.url!
+                let url = URL(string: urlString)
+                cell.userImage.af_setImage(withURL: url!)
+                
+                cell.userName.text = profile["name"] as? String ?? "Username"
+            }
+            
         }
         
-        cell.message.text = chat["lastMessage"] as! String
+        cell.message.text = (chat["lastMessage"] as! String)
         return cell
     }
     

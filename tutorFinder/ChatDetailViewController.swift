@@ -44,15 +44,16 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
 
         // Retrieve the Chat
         query.findObjectsInBackground { (chat, error) in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
+            if chat != nil {
                 self.currentChat = chat![0]
                 let messagesArray = self.currentChat["messages"] as! [PFObject]
                 let sliceArray = messagesArray.suffix(20)
                 self.messages = Array(sliceArray)
+            } else if chat == nil {
+                self.messages = []
+            } else if let error = error {
+                print(error.localizedDescription)
             }
-            
         }
     }
     
@@ -91,18 +92,47 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     @IBAction func onSendMessage(_ sender: Any) {
-        if textField.text != nil {
-            let message = PFObject(className: "Message")
+        if let newMessage = textField.text {
+            
+            // Create and save a new Message object
+            let message = PFObject(className: "Messages")
             message["sender"] = currentUser
             message["receiver"] = otherUser
-            message["message"] = textField.text
-            currentChat["lastMessage"] = textField.text
-            currentChat.add(message, forKey: "messages")
-            currentChat.saveInBackground { (success, error) in
-                if success {
+            message["message"] = newMessage
+            message.saveInBackground { (sucess, error) in
+                if (sucess) {
                     print("Message saved")
                 } else {
                     print("Error saving message")
+                }
+                
+            }
+            
+            if self.messages.count == 0 {
+                
+                // Create and save a new Chat object
+                let chat = PFObject(className: "Chats")
+                chat["users"] = [currentUser, otherUser]
+                chat["lastMessage"] = newMessage
+                chat["messages"] = [newMessage]
+                chat.saveInBackground { (sucess, error) in
+                    if (sucess) {
+                        print("New chat saved")
+                    } else {
+                        print("Error saving new chat")
+                    }
+                }
+            } else {
+                
+                // Update the current Chat object
+                currentChat["lastMessage"] = textField.text
+                currentChat.add(message, forKey: "messages")
+                currentChat.saveInBackground { (success, error) in
+                    if (success) {
+                        print("Chat saved")
+                    } else {
+                        print("Error saving chat")
+                    }
                 }
             }
             textField.text = nil
