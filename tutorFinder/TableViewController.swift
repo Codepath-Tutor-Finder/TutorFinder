@@ -65,7 +65,6 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         query.limit = 100
         query.order(byAscending: "name")
         query.whereKey("isTutor", notEqualTo: self.isTutor)
-        query.whereKey("isTutor", notEqualTo: self.isTutor)
         query.findObjectsInBackground { (profiles, error) in
             if profiles != nil {
                 self.profiles = profiles!

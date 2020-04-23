@@ -45,6 +45,19 @@ class LoginViewController: UIViewController {
             }
         }
         */
+        let user = PFUser()
+        user.username = usernameField.text!
+        user.password = passwordField.text!
+        
+        user.signUpInBackground { (success,error) in
+            if success {
+                print("User was signed up success")
+                
+            }
+            else{
+                print("Error: \(error?.localizedDescription ?? "didn't sign up")")
+            }
+        }
         self.performSegue(withIdentifier: "signUpSegue", sender: nil)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -30,28 +30,6 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
     
 
     @IBAction func onSubmitButton(_ sender: Any) {
-        let user = PFUser()
-        user.username = username
-        user.password = password
-        
-        user.signUpInBackground { (success,error) in
-            if success {
-                print("User was signed up success")
-                PFUser.logInWithUsername(inBackground: self.username, password: self.password)
-                {
-                    (user,error) in
-                    if user != nil {
-                    }
-                    else
-                    {
-                        print("Error: \(error?.localizedDescription ?? "could not log in")")
-                    }
-                }
-            }
-            else{
-                print("Error: \(error?.localizedDescription ?? "didn't sign up")")
-            }
-        }
         let profile = PFObject(className: "Profiles")
         profile["name"] = nameField.text!
         profile["description"] = descriptionField.text!
@@ -69,7 +47,7 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
         profile["author"] = PFUser.current()
         
         let imageData = imageView.image!.pngData()
-        let file = PFFileObject(data: imageData!)
+        let file = PFFileObject(name: "image.png" ,data: imageData!)
         
         profile["profilePic"] = file
         profile["subjects"] = subjects
