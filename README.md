@@ -127,4 +127,4 @@ A tool to help students find tutors and tutors to connect with students.
       - (Create/POST) Send a new message 
 ### Video Walkthrough(s)
 - Here are gifs showing the current progress:
-<img src='http://g.recordit.co/CaH5KKUN2z.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://g.recordit.co/pS1jPPpsj3.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
