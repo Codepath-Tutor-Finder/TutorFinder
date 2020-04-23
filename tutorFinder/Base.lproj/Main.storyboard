@@ -867,7 +867,13 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="MN9-Ps-54S"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Q7x-qO-Qan"/>
+                    <navigationItem key="navigationItem" id="Q7x-qO-Qan">
+                        <barButtonItem key="rightBarButtonItem" title="Chat" id="RZA-ad-qxA">
+                            <connections>
+                                <segue destination="rhA-QL-xx7" kind="presentation" modalPresentationStyle="fullScreen" id="qtP-Gx-uUV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -905,6 +911,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="qtP-Gx-uUV"/>
         <segue reference="K49-Z8-vbZ"/>
         <segue reference="Nue-fB-VTH"/>
     </inferredMetricsTieBreakers>
