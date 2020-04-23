@@ -48,9 +48,12 @@ class LoginViewController: UIViewController {
         self.performSegue(withIdentifier: "signUpSegue", sender: nil)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var vc = segue.destination as! CameraRegistrationViewController
+        if (segue.identifier == "signUpSegue")
+        {
+        let vc = segue.destination as! CameraRegistrationViewController
         vc.username = usernameField.text!
         vc.password = passwordField.text!
+        }
         
     }
     @IBAction func onSignIn(_ sender: Any) {
@@ -65,7 +68,7 @@ class LoginViewController: UIViewController {
             }
             else
             {
-                print("Error: \(error?.localizedDescription)")
+                print("Error: \(error?.localizedDescription ?? "could not log in")")
             }
         }
     }

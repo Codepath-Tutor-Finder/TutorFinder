@@ -13,6 +13,7 @@ class SubjectSelectionViewController: UIViewController, UITableViewDelegate, UIT
 
     @IBOutlet weak var subjectTableView: UITableView!
     let subjects = ["Computer Science", "Physics", "Calculus", "TestSubject"]
+    var selectedSubjects = [""]
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,19 +25,38 @@ class SubjectSelectionViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "subjectCell") as! UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subjectCell")!
         cell.textLabel?.text = subjects[indexPath.row]
         let switchView = UISwitch(frame: .zero)
         switchView.setOn(false, animated: true)
         switchView.tag = indexPath.row
-        switchView.addTarget(self, action: #selector(self.switchChanged()), for: .valueChanged)
+        switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switchView
         return cell
     }
     
-    func switchChanged( sender:UISwitch!)
+    @objc func switchChanged(_ sender:UISwitch!)
     {
-        
+        if (selectedSubjects.firstIndex(of: "") == 0)
+        {
+            selectedSubjects.remove(at: 0)
+        }
+        let subject = subjects[sender.tag]
+        if (sender.isOn)
+        {
+            selectedSubjects.append(subject)
+        }
+        else
+        {
+            if let index = selectedSubjects.firstIndex(of: subject)
+            {
+                selectedSubjects.remove(at: index)
+            }
+        }
+    }
+    
+    @IBAction func onConfirmButton(_ sender: Any) {
+        print(selectedSubjects)
     }
     /*
     // MARK: - Navigation

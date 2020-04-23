@@ -20,9 +20,11 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
     
     var username = ""
     var password = ""
-    var selectedSubjects = [""]
+    var subjects = [""]
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("username is: " ,username)
+        print("password is: " ,password)
         // Do any additional setup after loading the view.
     }
     
@@ -60,13 +62,14 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
         let file = PFFileObject(data: imageData!)
         
         profile["profilePic"] = file
+        profile["subjects"] = subjects
         profile.saveInBackground { (success,error) in
             if success {
                 print("saved user data")
             }
             else
             {
-                print("errror user data not saved!")
+                print("Error: \(error?.localizedDescription ?? "didn't save data")")
             }
         }
     }
@@ -88,6 +91,13 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
     
     @IBAction func onSubjectButton(_ sender: Any) {
         self.performSegue(withIdentifier: "subjectChooseSegue", sender: nil)
+    }
+    @IBAction func unwindToVC(_ unwindSegue: UIStoryboardSegue) {
+        if let sourceViewController = unwindSegue.source as? SubjectSelectionViewController
+        {
+            subjects = sourceViewController.selectedSubjects
+        }
+        // Use data from the view controller which initiated the unwind segue
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.editedImage] as! UIImage
