@@ -35,6 +35,30 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         conversationTable.rowHeight = 130
         conversationTable.separatorStyle = .none
         
+        self.loadUsers()
+        self.loadMessages()
+        
+    }
+    
+    func loadUsers() {
+        let query1 = PFQuery(className: "Profiles")
+        query1.whereKey("author", equalTo: currentUser)
+        query1.includeKey("name")
+        query1.findObjectsInBackground { (users, error) in
+            if let users = users {
+                self.otherUsername = users[0]["name"] as! String
+            }
+        }
+        
+        let query2 = PFQuery(className: "Profiles")
+        query2.whereKey("author", equalTo: otherUser)
+        query2.includeKey("name")
+        
+        query2.findObjectsInBackground { (users, error) in
+            if let users = users {
+                self.currentUsername = users[0]["name"] as! String
+            }
+        }
     }
 
     func loadMessages() {
