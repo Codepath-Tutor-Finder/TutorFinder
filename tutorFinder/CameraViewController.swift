@@ -15,7 +15,32 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var cameraImageView: UIImageView!
     
     @IBAction func cameraSubmitButton(_ sender: Any) {
-    }
+            let user = PFUser.current()
+            let authorQuery = PFQuery(className:"Profiles")
+            authorQuery.whereKey("author", equalTo: user!)
+            authorQuery.getFirstObjectInBackground { (profile,error) in
+                if error != nil
+                {
+                    print("error")
+                } else
+                {
+                    let imageData = self.cameraImageView.image!.pngData()
+                    let file = PFFileObject(name: "image.png", data: imageData!)
+                    profile!["profilePic"] = file
+                    
+                    profile!.saveInBackground { (success,error) in
+                        if success {
+                            print("saved user data")
+                        }
+                        else
+                        {
+                            print("Error: \(error?.localizedDescription ?? "didn't save data")")
+                        }
+                    }
+                }
+            }
+        }
+    
     @IBAction func onCameraButton(_ sender: Any) {
         let picker = UIImagePickerController()
         picker.delegate = self
