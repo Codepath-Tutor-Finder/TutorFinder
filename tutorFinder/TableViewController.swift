@@ -44,6 +44,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
+        searchBar.scopeButtonTitles = ["Name","Description","Email","Subjects"]
         let user = PFUser.current()
         let authorQuery = PFQuery(className:"Profiles")
         authorQuery.whereKey("author", equalTo: user!)
@@ -100,8 +101,19 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let subjects = PFQuery(className: "Profiles")
         descQuery.whereKey("subjects", contains: searchBar.text!)
-        
-        let query = PFQuery.orQuery(withSubqueries: [nameQuery, descQuery, mailQuery, subjects])
+        var query = PFQuery()
+        switch searchBar.selectedScopeButtonIndex {
+        case 0:
+            query = PFQuery.orQuery(withSubqueries: [nameQuery])
+        case 1:
+            query = PFQuery.orQuery(withSubqueries: [descQuery])
+        case 2:
+            query = PFQuery.orQuery(withSubqueries: [mailQuery])
+        case 3:
+            query = PFQuery.orQuery(withSubqueries: [subjects])
+        default:
+            query = PFQuery.orQuery(withSubqueries: [nameQuery])
+        }
         query.whereKey("isTutor", notEqualTo: self.isTutor)
         query.findObjectsInBackground { (profiles,error) in
             if error != nil {
