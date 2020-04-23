@@ -19,15 +19,41 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var descriptionField: UITextField!
     
     @IBAction func onSave(_ sender: Any) {
+        let user = PFUser.current()
+        let query = PFQuery(className:"Profiles")
+        query.whereKey("author", equalTo: user!)
+        query.getFirstObjectInBackground { (profile,error) in
+            if error != nil
+            {
+                print("error")
+            } else
+            {
+                profile!["name"] = self.nameField.text
+                profile!["contactEmail"] = self.emailField.text
+                profile!["description"] = self.descriptionField.text
+                let imageData = self.profileImageView.image!.pngData()
+                let file = PFFileObject(name: "image.png", data: imageData!)
+                profile!["profilePic"] = file
+                profile!.saveInBackground { (success,error) in
+                    if success {
+                        print("saved user data")
+                    }
+                    else
+                    {
+                        print("Error: \(error?.localizedDescription ?? "didn't save data")")
+                    }
+                }
+            }
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let user = PFUser.current()
-        let authorQuery = PFQuery(className:"Profiles")
-        authorQuery.whereKey("author", equalTo: user!)
+        let query = PFQuery(className:"Profiles")
+        query.whereKey("author", equalTo: user!)
         //let query = PFQuery.orQuery(withSubqueries: [authorQuery])
-        authorQuery.getFirstObjectInBackground { (profile,error) in
+        query.getFirstObjectInBackground { (profile,error) in
             if error != nil
             {
                 print("error")
