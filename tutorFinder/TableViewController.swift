@@ -14,6 +14,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     var profiles = [PFObject]()
     var allProfiles = [PFObject]()
+    var isTutor = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return profiles.count
     }
@@ -43,6 +44,19 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
+        let user = PFUser.current()
+        let authorQuery = PFQuery(className:"Profiles")
+        authorQuery.whereKey("author", equalTo: user!)
+        //let query = PFQuery.orQuery(withSubqueries: [authorQuery])
+        authorQuery.getFirstObjectInBackground { (profile,error) in
+            if error != nil
+            {
+                print("error")
+            } else
+            {
+                self.isTutor = profile!["isTutor"] as! Bool
+            }
+        }
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -50,6 +64,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let query = PFQuery(className: "Profiles")
         query.limit = 100
         query.order(byAscending: "name")
+        query.whereKey("isTutor", notEqualTo: self.isTutor)
+        query.whereKey("isTutor", notEqualTo: self.isTutor)
         query.findObjectsInBackground { (profiles, error) in
             if profiles != nil {
                 self.profiles = profiles!
@@ -63,6 +79,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let query = PFQuery(className: "Profiles")
         query.limit = 100
         query.order(byAscending: "name")
+        query.whereKey("isTutor", notEqualTo: self.isTutor)
         query.findObjectsInBackground { (profiles, error) in
             if profiles != nil {
                 self.profiles = profiles!
@@ -79,7 +96,14 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let descQuery = PFQuery(className: "Profiles")
         descQuery.whereKey("description", contains: searchBar.text!)
         
-        let query = PFQuery.orQuery(withSubqueries: [nameQuery, descQuery])
+        let mailQuery = PFQuery(className: "Profiles")
+        descQuery.whereKey("contactEmail", contains: searchBar.text!)
+        
+        let subjects = PFQuery(className: "Profiles")
+        descQuery.whereKey("subjects", contains: searchBar.text!)
+        
+        let query = PFQuery.orQuery(withSubqueries: [nameQuery, descQuery, mailQuery, subjects])
+        query.whereKey("isTutor", notEqualTo: self.isTutor)
         query.findObjectsInBackground { (profiles,error) in
             if error != nil {
                 print("error")
