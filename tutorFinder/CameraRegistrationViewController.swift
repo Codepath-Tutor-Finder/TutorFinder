@@ -37,6 +37,16 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
         user.signUpInBackground { (success,error) in
             if success {
                 print("User was signed up success")
+                PFUser.logInWithUsername(inBackground: self.username, password: self.password)
+                {
+                    (user,error) in
+                    if user != nil {
+                    }
+                    else
+                    {
+                        print("Error: \(error?.localizedDescription ?? "could not log in")")
+                    }
+                }
             }
             else{
                 print("Error: \(error?.localizedDescription ?? "didn't sign up")")
