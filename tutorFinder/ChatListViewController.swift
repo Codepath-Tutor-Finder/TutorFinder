@@ -49,9 +49,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         query.findObjectsInBackground { (chats, error) in
             if chats != nil {
                 self.chats = chats!
-                print("to reload")
                 self.chatTable.reloadData()
-                print("end reload")
             } else {
                 let error = error
                 print(error?.localizedDescription)
@@ -77,10 +75,10 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             let users = chat["users"] as! [PFUser]
             let lastMessage = chat["lastMessage"] as! PFObject
             
-            if users[0] != currentUser {
-                otherUser = users[1]
-            } else {
+            if users[0].objectId != self.currentUser?.objectId {
                 otherUser = users[0]
+            } else {
+                otherUser = users[1]
             }
             
             let query = PFQuery(className: "Messages")
@@ -89,6 +87,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                 if objects != nil {
                     let object = objects![0] as PFObject
                     message = object["message"] as! String
+                    cell.message.text = message
                 } else {
                     let error = error
                     print(error?.localizedDescription)
@@ -159,8 +158,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                     for profile in profiles {
                         let otherUser = profile["author"] as! PFUser
                         if otherUser.objectId != self.currentUser?.objectId {
-                            print(otherUser != self.currentUser)
-                            print(profile["name"])
                             matchedUsers.append(otherUser)
                         }
                     }
@@ -177,22 +174,18 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                 query.findObjectsInBackground { (chats, error) in
                     if chats != nil {
                         self.filteredChats = chats!
-                        print(self.filteredChats)
                         for chat in self.filteredChats {
                             let users = chat["users"] as! [PFUser]
-                            if users[0] != self.currentUser {
-                                self.filteredUsers.append(users[1])
-                            } else {
+                            if users[0].objectId != self.currentUser?.objectId {
                                 self.filteredUsers.append(users[0])
+                            } else {
+                                self.filteredUsers.append(users[1])
                             }
                         }
                     } else {
                         let error = error
                         print(error?.localizedDescription)
                     }
-                    
-                    print(self.filteredChats)
-                    
                     self.chatTable.reloadData()
                 }
             }
