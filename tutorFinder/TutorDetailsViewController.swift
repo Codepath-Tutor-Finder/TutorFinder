@@ -28,37 +28,8 @@ class TutorDetailsViewController: UIViewController {
         let url = URL(string: urlString)!
         profileImageView.af_setImage(withURL: url)
         // Do any additional setup after loading the view.
-        
-        self.addChats()
     }
     
-    func addChats() {
-        let currentUser = PFUser.current()
-        let otherUser = profile["author"]
-        let message = PFObject(className: "Messages")
-        message["message"] = "You are connected, let's talk"
-        message["sender"] = otherUser
-        message["receiver"] = currentUser
-        message.saveInBackground { (success, error) in
-            if success {
-                print("Message saved")
-            } else {
-                print("Error saving message")
-            }
-        }
-        
-        let chat = PFObject(className: "Chats")
-        chat["users"] = [currentUser, otherUser]
-        chat["lastMessage"] = message
-        chat.add(message, forKey: "messages")
-        chat.saveInBackground { (success, error) in
-            if success {
-                print("Chat saved")
-            } else {
-                print("Error saving chat")
-            }
-        }
-    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         /*let query = PFQuery(className:"Profiles")
