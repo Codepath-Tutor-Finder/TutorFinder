@@ -86,25 +86,20 @@ class TutorDetailsViewController: UIViewController {
                 }
             }*/
     }
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if (segue.identifier == "chatDetailSegue")
-//        {
-//            let vc = segue.destination as! ChatDetailViewController
-//            let currentUser = PFUser.current()!
-//            let otherUser = profile["author"] as! PFUser
-////            vc.currentUser = PFUser.current()!
-////            print(vc.currentUser)
-////            let otherUser = PFUser()
-////            otherUser.objectId = profile["author"] as? String
-////            vc.otherUser = otherUser
-////            print(vc.otherUser)
-//            vc.currentUser = currentUser
-//            vc.otherUser = otherUser
-//
-//            print("Did perfom")
-//        }
-//
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "chatDetailSegue")
+        {
+            let vc = segue.destination as! ChatDetailViewController
+            let currentUser =  PFUser.current()!
+            print(vc.currentUser)
+            let otherUser = PFUser()
+            otherUser.objectId = profile["author"] as? String
+            vc.otherUser = otherUser
+            print(vc.otherUser)
+
+        }
+
+    }
 
     
 
