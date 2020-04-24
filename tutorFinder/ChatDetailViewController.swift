@@ -12,8 +12,8 @@ import Parse
 
 class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var currentUser = PFUser()
-    var otherUser = PFUser()
+    var currentUser : PFUser!
+    var otherUser : PFUser!
     
     var currentChat = PFObject()
     var messages = [PFObject]()
@@ -42,10 +42,13 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadUsers()
+    }
     func loadUsers() {
         let query1 = PFQuery(className: "Profiles")
         query1.whereKey("author", equalTo: currentUser)
-        query1.includeKey("name")
         query1.findObjectsInBackground { (users, error) in
             if let users = users {
                 self.otherUsername = users[0]["name"] as! String
@@ -54,8 +57,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let query2 = PFQuery(className: "Profiles")
         query2.whereKey("author", equalTo: otherUser)
-        query2.includeKey("name")
-        
         query2.findObjectsInBackground { (users, error) in
             if let users = users {
                 self.currentUsername = users[0]["name"] as! String

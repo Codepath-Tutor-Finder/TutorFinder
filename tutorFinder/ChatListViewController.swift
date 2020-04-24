@@ -98,14 +98,15 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             
         } else {
             let chat = filteredChats[indexPath.row]
-            otherUser = filteredUsers[indexPath.row]
             let lastMessage = chat["lastMessage"] as! PFObject
+            otherUser = filteredUsers[indexPath.row]
             let query = PFQuery(className: "Messages")
             query.whereKey("objectId", equalTo: lastMessage.objectId)
             query.findObjectsInBackground { (objects, error) in
                 if objects != nil {
                     let object = objects![0] as PFObject
                     message = object["message"] as! String
+                    cell.message.text = message
                 } else {
                     let error = error
                     print(error?.localizedDescription)
@@ -128,7 +129,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             
         }
         
-        cell.message.text = message
+        //cell.message.text = message
         return cell
     }
     
@@ -145,66 +146,77 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         filteredChats = [PFObject]()
         filteredUsers = [PFUser]()
         
-        if let keyword = searchBar.text {
-
+        if searchBar.text != "" {
+            let keyword = searchBar.text
+            var matchedUsers = [PFObject]()
+            
             // Grab PFUser with "name" matched keyword
             let profileQuery = PFQuery(className:"Profiles")
             profileQuery.whereKey("name", contains: keyword)
-
+            print(keyword)
             profileQuery.findObjectsInBackground { (profiles, error) in
                 if let profiles = profiles {
                     for profile in profiles {
                         let otherUser = profile["author"] as! PFUser
-                        self.filteredUsers.append(otherUser)
-                    }
-                } else if let error = error {
-                    print(error.localizedDescription)
-                }
-            }
-            
-            //print(filteredUsers)
-
-            // Grab Chats with otherUser included in "users"
-            let chatQuery = PFQuery(className: "Chats")
-            chatQuery.whereKey("user", containedIn: otherUsers)
-            chatQuery.includeKey("lastMessage")
-            chatQuery.limit = 5
-
-            chatQuery.findObjectsInBackground { (chats, error) in
-                if let chats = chats {
-                    for chat in chats {
-                        let message = chat["lastMessage"] as! PFObject
-                        self.filteredChats.append(message)
-
-                        let sender = message["sender"] as! PFUser
-                        let receiver = message["receiver"] as! PFUser
-
-                        if sender == self.currentUser {
-                            self.filteredUsers.append(receiver)
-                        } else {
-                            self.filteredUsers.append(sender)
+                        if otherUser.objectId != self.currentUser?.objectId {
+                            print(otherUser != self.currentUser)
+                            print(profile["name"])
+                            matchedUsers.append(otherUser)
                         }
                     }
-
                 } else if let error = error {
                     print(error.localizedDescription)
                 }
+                
+                let query = PFQuery(className: "Chats")
+                query.whereKey("users", containedIn: matchedUsers)
+                
+                query.order(byDescending: "updatedAt")
+                query.limit = 20
+                
+                query.findObjectsInBackground { (chats, error) in
+                    if chats != nil {
+                        self.filteredChats = chats!
+                        print(self.filteredChats)
+                        for chat in self.filteredChats {
+                            let users = chat["users"] as! [PFUser]
+                            if users[0] != self.currentUser {
+                                self.filteredUsers.append(users[1])
+                            } else {
+                                self.filteredUsers.append(users[0])
+                            }
+                        }
+                    } else {
+                        let error = error
+                        print(error?.localizedDescription)
+                    }
+                    
+                    print(self.filteredChats)
+                    
+                    self.chatTable.reloadData()
+                }
             }
+
+            // Grab Chats with otherUser included in "users"
+            
 
             // Grab Message with "message" mathced keyword
-            let messageQuery = PFQuery(className: "Messages")
-            messageQuery.whereKey("message", contains: keyword)
-            messageQuery.limit = 5
-            messageQuery.findObjectsInBackground { (messages, error) in
-                if let messages = messages {
-                    for message in messages {
-                        self.filteredChats.append(message)
-                    }
-                } else if let error = error {
-                    print(error.localizedDescription)
-                }
-            }
+//            let messageQuery = PFQuery(className: "Messages")
+//            messageQuery.whereKey("message", contains: keyword)
+//            messageQuery.limit = 5
+//            messageQuery.findObjectsInBackground { (messages, error) in
+//                if let messages = messages {
+//                    for message in messages {
+//                        self.filteredChats.append(message)
+//                    }
+//                } else if let error = error {
+//                    print(error.localizedDescription)
+//                }
+//            }
 
+        } else {
+            filteredChats = [PFObject]()
+            filteredUsers = [PFUser]()
             chatTable.reloadData()
         }
     }
