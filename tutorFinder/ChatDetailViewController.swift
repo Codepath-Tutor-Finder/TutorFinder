@@ -18,8 +18,8 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     var currentChat = PFObject()
     var messages = [PFObject]()
     
-    var currentUsername = String()
-    var otherUsername = String()
+    var currentUsername = "Self"
+    var otherUsername = "Other user"
     
     @IBOutlet weak var textField: UITextField!
     
@@ -27,6 +27,8 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("Did appear")
         conversationTable.delegate = self
         conversationTable.dataSource = self
         
@@ -160,7 +162,8 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
             } else {
                 
                 // Update the current Chat object
-                currentChat["lastMessage"] = textField.text
+                //currentChat["lastMessage"] = textField.text
+                currentChat["lastMessage"] = message
                 currentChat.add(message, forKey: "messages")
                 currentChat.saveInBackground { (success, error) in
                     if (success) {

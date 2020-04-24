@@ -28,8 +28,37 @@ class TutorDetailsViewController: UIViewController {
         let url = URL(string: urlString)!
         profileImageView.af_setImage(withURL: url)
         // Do any additional setup after loading the view.
+        
+        self.addChats()
     }
     
+    func addChats() {
+        let currentUser = PFUser.current()
+        let otherUser = profile["author"]
+        let message = PFObject(className: "Messages")
+        message["message"] = "You are connected, let's talk"
+        message["sender"] = otherUser
+        message["receiver"] = currentUser
+        message.saveInBackground { (success, error) in
+            if success {
+                print("Message saved")
+            } else {
+                print("Error saving message")
+            }
+        }
+        
+        let chat = PFObject(className: "Chats")
+        chat["users"] = [currentUser, otherUser]
+        chat["lastMessage"] = message
+        chat.add(message, forKey: "messages")
+        chat.saveInBackground { (success, error) in
+            if success {
+                print("Chat saved")
+            } else {
+                print("Error saving chat")
+            }
+        }
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         /*let query = PFQuery(className:"Profiles")
@@ -57,19 +86,25 @@ class TutorDetailsViewController: UIViewController {
                 }
             }*/
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "chatDetailSegue")
-        {
-            let vc = segue.destination as! ChatDetailViewController
-            vc.currentUser = PFUser.current()!
-            print(vc.currentUser)
-            let otherUser = PFUser()
-            otherUser.objectId = profile["author"] as? String
-            vc.otherUser = otherUser
-            print(vc.otherUser)
-        }
-        
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if (segue.identifier == "chatDetailSegue")
+//        {
+//            let vc = segue.destination as! ChatDetailViewController
+//            let currentUser = PFUser.current()!
+//            let otherUser = profile["author"] as! PFUser
+////            vc.currentUser = PFUser.current()!
+////            print(vc.currentUser)
+////            let otherUser = PFUser()
+////            otherUser.objectId = profile["author"] as? String
+////            vc.otherUser = otherUser
+////            print(vc.otherUser)
+//            vc.currentUser = currentUser
+//            vc.otherUser = otherUser
+//
+//            print("Did perfom")
+//        }
+//
+//    }
 
     
 

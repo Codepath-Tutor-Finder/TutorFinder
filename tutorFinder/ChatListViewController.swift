@@ -27,36 +27,36 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         chatTable.delegate = self
         chatTable.dataSource = self
         chatSearchBar.delegate = self
-        self.loadChats()
-        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // Load lists of chats
+        super.viewDidAppear(animated)
+        loadChats()
     }
     
     // Function to load lists of chats
     func loadChats() {
         let query = PFQuery(className: "Chats")
         
-        // Retrieve chats whereKey "users" include currentUser and otherUser
         query.whereKey("users", containsAllObjectsIn:[currentUser!])
         query.order(byDescending: "updatedAt")
         query.limit = 20
         
-
-        // Include keys in the query: users (array), lastMessage
-        
-        // Retrieve Chats objects to assign them to chats (list)
         query.findObjectsInBackground { (chats, error) in
-            if let error = error {
-                print(error.localizedDescription)
+            if chats != nil {
+                self.chats = chats!
+                print("to reload")
+                self.chatTable.reloadData()
+                print("end reload")
             } else {
-                self.chats = chats ?? []
-                print(self.chats)
+                let error = error
+                print(error?.localizedDescription)
             }
         }
-        chatTable.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,6 +64,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             return chats.count
         } else {
             return filteredChats.count
+
         }
     }
     
@@ -74,18 +75,42 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         if chatSearchBar.text == "" {
             let chat = chats[indexPath.row]
             let users = chat["users"] as! [PFUser]
-            message = chat["lastMessage"] as! String
+            let lastMessage = chat["lastMessage"] as! PFObject
+            
             if users[0] != currentUser {
-                otherUser = users[0]
-            } else {
                 otherUser = users[1]
+            } else {
+                otherUser = users[0]
+            }
+            
+            let query = PFQuery(className: "Messages")
+            query.whereKey("objectId", equalTo: lastMessage.objectId)
+            query.findObjectsInBackground { (objects, error) in
+                if objects != nil {
+                    let object = objects![0] as PFObject
+                    message = object["message"] as! String
+                } else {
+                    let error = error
+                    print(error?.localizedDescription)
+                }
             }
             otherUsers.append(otherUser)
             
         } else {
             let chat = filteredChats[indexPath.row]
             otherUser = filteredUsers[indexPath.row]
-            message = chat["message"] as! String
+            let lastMessage = chat["lastMessage"] as! PFObject
+            let query = PFQuery(className: "Messages")
+            query.whereKey("objectId", equalTo: lastMessage.objectId)
+            query.findObjectsInBackground { (objects, error) in
+                if objects != nil {
+                    let object = objects![0] as PFObject
+                    message = object["message"] as! String
+                } else {
+                    let error = error
+                    print(error?.localizedDescription)
+                }
+            }
         }
         
         let query = PFQuery(className: "Profiles")
@@ -111,57 +136,61 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         searchBar.text = ""
         filteredChats = [PFObject]()
         filteredUsers = [PFUser]()
-        
+
         searchBar.endEditing(true)
         chatTable.reloadData()
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredChats = [PFObject]()
+        filteredUsers = [PFUser]()
+        
         if let keyword = searchBar.text {
-            
+
             // Grab PFUser with "name" matched keyword
             let profileQuery = PFQuery(className:"Profiles")
             profileQuery.whereKey("name", contains: keyword)
-            profileQuery.includeKey("author")
-            
+
             profileQuery.findObjectsInBackground { (profiles, error) in
                 if let profiles = profiles {
                     for profile in profiles {
                         let otherUser = profile["author"] as! PFUser
-                        self.otherUsers.append(otherUser)
+                        self.filteredUsers.append(otherUser)
                     }
                 } else if let error = error {
                     print(error.localizedDescription)
                 }
             }
-        
+            
+            //print(filteredUsers)
+
             // Grab Chats with otherUser included in "users"
             let chatQuery = PFQuery(className: "Chats")
             chatQuery.whereKey("user", containedIn: otherUsers)
             chatQuery.includeKey("lastMessage")
             chatQuery.limit = 5
-            
+
             chatQuery.findObjectsInBackground { (chats, error) in
                 if let chats = chats {
                     for chat in chats {
                         let message = chat["lastMessage"] as! PFObject
                         self.filteredChats.append(message)
-                        
+
                         let sender = message["sender"] as! PFUser
                         let receiver = message["receiver"] as! PFUser
-                        
+
                         if sender == self.currentUser {
                             self.filteredUsers.append(receiver)
                         } else {
                             self.filteredUsers.append(sender)
                         }
                     }
-                    
+
                 } else if let error = error {
                     print(error.localizedDescription)
                 }
             }
-            
+
             // Grab Message with "message" mathced keyword
             let messageQuery = PFQuery(className: "Messages")
             messageQuery.whereKey("message", contains: keyword)
@@ -175,7 +204,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                     print(error.localizedDescription)
                 }
             }
-            
+
             chatTable.reloadData()
         }
     }
