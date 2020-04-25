@@ -99,7 +99,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         case 2:
             query.whereKey("contactEmail", contains: searchBar.text!)
         case 3:
-            query.whereKey("subjects", contains: searchBar.text!)
+            var subject = [""]
+            subject.remove(at: 0)
+            subject.append(searchBar.text!)
+            query.whereKey("subjects", containsAllObjectsIn: subject)
         default:
             query.whereKey("name", contains: searchBar.text!)
         }
