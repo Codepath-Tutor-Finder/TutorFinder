@@ -47,6 +47,19 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    @IBAction func onLogOutButton(_ sender: Any) {
+        PFUser.logOut()
+        let currUser = PFUser.current()
+        if (currUser == nil)
+        {
+            print("logged out successfully")
+            performSegue(withIdentifier: "logoutSegue", sender: nil)
+        }
+        else
+        {
+            print("user not logged out")
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         let user = PFUser.current()

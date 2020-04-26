@@ -467,6 +467,11 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="AFt-nM-hff">
+                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="VFK-0S-nXj">
+                            <connections>
+                                <action selector="onLogOutButton:" destination="Q12-0W-4Fv" id="JMb-0d-LFu"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Edit Image" id="k3w-pM-UUd">
                             <connections>
                                 <segue destination="OTG-vp-h5N" kind="presentation" id="eWn-Dj-1jj"/>
@@ -479,6 +484,7 @@
                         <outlet property="emailField" destination="bQl-uh-TwR" id="NdH-xr-re8"/>
                         <outlet property="nameField" destination="Yct-k3-pYd" id="2BN-tg-mYv"/>
                         <outlet property="profileImageView" destination="Xm7-Vd-Bd7" id="we8-JX-Eq4"/>
+                        <segue destination="g3t-OC-gDP" kind="presentation" identifier="logoutSegue" modalPresentationStyle="fullScreen" id="c0T-7o-RGF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3GQ-ZV-SYh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -976,7 +982,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BbL-6B-oiB">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Log Out" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BbL-6B-oiB">
                                 <rect key="frame" x="16" y="383" width="343" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1035,6 +1041,7 @@
         <segue reference="1Zh-hZ-bWx"/>
         <segue reference="K49-Z8-vbZ"/>
         <segue reference="Nue-fB-VTH"/>
+        <segue reference="c0T-7o-RGF"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="paperplane.fill" catalog="system" width="128" height="121"/>
