@@ -96,6 +96,10 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
         present(picker, animated: true, completion: nil)
     }
     
+
+    @IBAction func didTap(_ sender: Any) {
+        view.endEditing(true)
+    }
     @IBAction func onSubjectButton(_ sender: Any) {
         self.performSegue(withIdentifier: "subjectChooseSegue", sender: nil)
     }

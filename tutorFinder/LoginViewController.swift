@@ -63,6 +63,9 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    @IBAction func didTap(_ sender: Any) {
+        view.endEditing(true)
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "signUpSegue")
         {
@@ -88,4 +91,5 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
 }

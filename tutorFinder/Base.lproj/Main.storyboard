@@ -59,7 +59,11 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <gestureRecognizers/>
                         <viewLayoutGuide key="safeArea" id="Wc3-Wa-y0D"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="e7z-oC-yR6" appends="YES" id="OSR-ux-4hB"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="passwordField" destination="VVF-NI-00y" id="hem-CK-xf1"/>
@@ -69,6 +73,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v3c-qm-Mx7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="e7z-oC-yR6">
+                    <connections>
+                        <action selector="didTap:" destination="g3t-OC-gDP" id="NQJ-Uz-sZe"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="565.60000000000002" y="107.49625187406298"/>
         </scene>
@@ -183,9 +192,6 @@
                                                     <constraint firstAttribute="height" constant="187" id="e11-YV-7sc"/>
                                                     <constraint firstAttribute="width" secondItem="Wsg-24-cGq" secondAttribute="height" multiplier="1:1" id="hrO-lC-cfb"/>
                                                 </constraints>
-                                                <connections>
-                                                    <outletCollection property="gestureRecognizers" destination="Goh-UT-wgz" appends="YES" id="ODw-v7-zX7"/>
-                                                </connections>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ILu-km-TO7">
                                                 <rect key="frame" x="163" y="1067" width="49" height="30"/>
@@ -246,11 +252,21 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" spellCheckingType="no" textContentType="password"/>
                                             </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYn-8M-vjJ">
+                                                <rect key="frame" x="7" y="8" width="48" height="30"/>
+                                                <state key="normal" title="Cancel"/>
+                                                <connections>
+                                                    <segue destination="g3t-OC-gDP" kind="presentation" modalPresentationStyle="fullScreen" id="Htg-Ma-VU5"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <gestureRecognizers/>
                                         <constraints>
+                                            <constraint firstItem="gnD-dl-I8r" firstAttribute="leading" secondItem="tYn-8M-vjJ" secondAttribute="trailing" constant="93" id="1lb-hl-3s8"/>
                                             <constraint firstItem="Py1-tZ-UO2" firstAttribute="top" secondItem="JYm-Fu-CrJ" secondAttribute="bottom" constant="5" id="2ba-u3-Evk"/>
                                             <constraint firstItem="OsV-J9-Q1a" firstAttribute="centerX" secondItem="YDY-XW-NjE" secondAttribute="centerX" id="2m5-2n-PoC"/>
+                                            <constraint firstItem="tYn-8M-vjJ" firstAttribute="leading" secondItem="YDY-XW-NjE" secondAttribute="leading" constant="7" id="5N3-s1-PLq"/>
                                             <constraint firstItem="ILu-km-TO7" firstAttribute="centerX" secondItem="YDY-XW-NjE" secondAttribute="centerX" id="5Ow-2o-RNO"/>
                                             <constraint firstItem="MMR-HX-KLB" firstAttribute="top" secondItem="6Zu-Ax-9BV" secondAttribute="bottom" constant="8" id="9u0-Db-QrQ"/>
                                             <constraint firstItem="Py1-tZ-UO2" firstAttribute="centerX" secondItem="YDY-XW-NjE" secondAttribute="centerX" id="C4g-OD-LB7"/>
@@ -285,10 +301,12 @@
                                             <constraint firstItem="03U-tG-xgK" firstAttribute="centerX" secondItem="YDY-XW-NjE" secondAttribute="centerX" id="ue5-cx-f9p"/>
                                             <constraint firstItem="Yhy-4Z-2rB" firstAttribute="centerX" secondItem="YDY-XW-NjE" secondAttribute="centerX" id="vig-Pu-HRG"/>
                                             <constraint firstItem="OLI-Pn-NmR" firstAttribute="top" secondItem="IcG-ag-zH2" secondAttribute="bottom" constant="20" id="wlr-Te-kCx"/>
+                                            <constraint firstItem="tYn-8M-vjJ" firstAttribute="top" secondItem="YDY-XW-NjE" secondAttribute="top" constant="8" id="xnW-nd-nSW"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.1137254902" green="0.63137254899999995" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="YDY-XW-NjE" firstAttribute="top" secondItem="oGu-sW-dpu" secondAttribute="top" id="8K1-An-2aS"/>
                                     <constraint firstAttribute="trailing" secondItem="YDY-XW-NjE" secondAttribute="trailing" id="DpP-Kh-YPz"/>
@@ -299,9 +317,13 @@
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="elS-rR-916"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="I0q-yV-lE9"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Uw4-hL-pGI" appends="YES" id="NhI-14-Zhc"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="oGu-sW-dpu" firstAttribute="leading" secondItem="sVl-kQ-wIQ" secondAttribute="leading" id="0V9-Eq-tfE"/>
                             <constraint firstItem="sVl-kQ-wIQ" firstAttribute="bottom" secondItem="oGu-sW-dpu" secondAttribute="bottom" id="VrW-iR-Q0u"/>
@@ -309,6 +331,9 @@
                             <constraint firstItem="sVl-kQ-wIQ" firstAttribute="trailing" secondItem="oGu-sW-dpu" secondAttribute="trailing" id="c8P-Q7-YyH"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="sVl-kQ-wIQ"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Uw4-hL-pGI" appends="YES" id="C9k-wc-MMb"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Upload Your Profile Picture" largeTitleDisplayMode="always" id="FMH-b0-TeI"/>
                     <size key="freeformSize" width="375" height="1000"/>
@@ -324,9 +349,9 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uaa-TB-rFy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="Goh-UT-wgz">
+                <tapGestureRecognizer id="Uw4-hL-pGI">
                     <connections>
-                        <action selector="onCameraButton:" destination="53e-ss-OE2" id="Age-gy-Gb4"/>
+                        <action selector="didTap:" destination="53e-ss-OE2" id="DJb-wH-LdJ"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -984,9 +1009,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="wAb-sh-y0z"/>
         <segue reference="1Zh-hZ-bWx"/>
         <segue reference="K49-Z8-vbZ"/>
-        <segue reference="AZN-OH-44C"/>
+        <segue reference="Nue-fB-VTH"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="paperplane.fill" catalog="system" width="128" height="121"/>
