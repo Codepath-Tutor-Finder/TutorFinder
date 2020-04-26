@@ -609,7 +609,7 @@
             </objects>
             <point key="canvasLocation" x="3647" y="-624"/>
         </scene>
-        <!--Tutor-->
+        <!--Chat-->
         <scene sceneID="7EX-Ak-Nae">
             <objects>
                 <viewController id="rhA-QL-xx7" customClass="ChatDetailViewController" customModule="tutorFinder" customModuleProvider="target" sceneMemberID="viewController">
@@ -648,7 +648,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="art-8f-Tr1">
                                                     <rect key="frame" x="15" y="16" width="359" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="User Label"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -712,7 +712,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="EPR-qS-gxH"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Tutor" id="61Y-DU-gFn">
+                    <navigationItem key="navigationItem" title="Chat" id="61Y-DU-gFn">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="return" catalog="system" id="nz0-rE-lUq">
                             <connections>
                                 <action selector="onReturn:" destination="rhA-QL-xx7" id="vDS-pp-b94"/>

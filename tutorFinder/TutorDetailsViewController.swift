@@ -60,12 +60,19 @@ class TutorDetailsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "chatDetailSegue")
         {
-            let vc = segue.destination as! ChatDetailViewController
+            //let vc = segue.destination as! ChatDetailViewController
+            
+            let destinationNavigationController = segue.destination as! UINavigationController
+            let vc = destinationNavigationController.topViewController as! ChatDetailViewController
             let currentUser =  PFUser.current()!
             print(vc.currentUser)
-            let otherUser = PFUser()
-            otherUser.objectId = profile["author"] as? String
-            vc.otherUser = otherUser
+            
+            //let otherUser = PFUser()
+            //otherUser.objectId = (profile["author"] as! PFUser).objectId as? String
+            //vc.otherUser = otherUser
+            
+            vc.otherUser = profile["author"] as! PFUser
+            vc.currentUser = currentUser
             print(vc.otherUser)
 
         }

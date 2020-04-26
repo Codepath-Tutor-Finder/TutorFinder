@@ -19,6 +19,8 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
     var filteredChats = [PFObject]()
     var filteredUsers = [PFUser]()
     
+    var timer: Timer!
+    
     @IBOutlet weak var chatTable: UITableView!
     @IBOutlet weak var chatSearchBar: UISearchBar!
     
@@ -88,6 +90,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                     let object = objects![0] as PFObject
                     message = object["message"] as! String
                     cell.message.text = message
+                    
                 } else {
                     let error = error
                     print(error?.localizedDescription)
@@ -140,7 +143,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         searchBar.endEditing(true)
         chatTable.reloadData()
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredChats = [PFObject]()
         filteredUsers = [PFUser]()
@@ -217,32 +220,29 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedVC = ChatDetailViewController()
-        
-        if chatSearchBar.text == "" {
-            let otherUser = otherUsers[indexPath.row]
-            selectedVC.otherUser = otherUser
-            print(selectedVC.otherUser)
-        } else {
-            let message = filteredChats[indexPath.row]
-            let users = message["users"] as! [PFUser]
-            if users[0].objectId != currentUser?.objectId {
-                let otherUser = users[0]
-                selectedVC.otherUser = otherUser
-                print(selectedVC.otherUser)
-            } else {
-                let otherUser = users[1]
-                selectedVC.otherUser = otherUser
-                print(selectedVC.otherUser)
-            }
-        }
-        
-        selectedVC.currentUser = currentUser!
-        print(currentUser)
-
-        self.performSegue(withIdentifier: "ToChatSegue", sender: nil)
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.performSegue(withIdentifier: "ToChatSegue", sender: self)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? UITableViewCell {
+            let i = chatTable.indexPath(for: cell)!.row
+            if segue.identifier == "ToChatSegue" {
+                let destinationNavigationController = segue.destination as! UINavigationController
+                let vc = destinationNavigationController.topViewController as! ChatDetailViewController
+                
+                var id = String()
+                if chatSearchBar.text == "" {
+                    vc.otherUser = otherUsers[i]
+                } else {
+                    vc.otherUser = filteredUsers[i]
+                }
+                vc.currentUser = currentUser
+                print("Current User: \(vc.currentUser)")
+                print("Other user: \(vc.otherUser)")
+            }
+        }
+    }
     /*
     // MARK: - Navigation
 

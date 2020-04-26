@@ -12,7 +12,7 @@ import Parse
 
 class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var currentUser = PFUser.current()
+    var currentUser : PFUser!
     var otherUser : PFUser!
     var currentChat : PFObject!
     var messages = [PFObject]()
@@ -21,12 +21,10 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     var otherUsername = "Other user"
 
     @IBOutlet weak var textField: UITextField!
-
     @IBOutlet weak var conversationTable: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        print("Did appear")
         conversationTable.delegate = self
         conversationTable.dataSource = self
 
@@ -34,7 +32,22 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
 //        conversationTable.rowHeight = UITableView.automaticDimension
         conversationTable.rowHeight = 130
         conversationTable.separatorStyle = .none
-
+        
+        let query = PFQuery(className: "Chats")
+        print(self.currentUser!)
+        print(self.otherUser!)
+        
+        // Retrieve Chat (only one) whereKey "users" include currentUser and otherUser
+        query.whereKey("users", containsAllObjectsIn:[self.currentUser!, self.otherUser!])
+        query.findObjectsInBackground { (chats, error) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                if chats!.count != 0 {
+                    self.currentChat = chats![0]
+                }
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -43,79 +56,86 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         loadMessages()
     }
     func loadUsers() {
-        print("Inside load users")
         let query1 = PFQuery(className: "Profiles")
-        query1.whereKey("author", equalTo: currentUser)
+        query1.whereKey("author", equalTo: currentUser!)
         query1.findObjectsInBackground { (users, error) in
             if let users = users {
-                self.otherUsername = users[0]["name"] as! String
+                self.currentUsername = users[0]["name"] as! String
+            } else {
+                let error = error!
+                print(error.localizedDescription)
             }
         }
-        
-        print("After query 1")
 
         let query2 = PFQuery(className: "Profiles")
-        query2.whereKey("author", equalTo: otherUser)
+        print(otherUser)
+        query2.whereKey("author", equalTo: otherUser!)
         query2.findObjectsInBackground { (users, error) in
             if let users = users {
-                self.currentUsername = users[0]["name"] as! String
+                self.otherUsername = users[0]["name"] as! String
+                self.title = self.otherUsername
+            } else {
+                let error = error!
+                print(error.localizedDescription)
             }
         }
-        print("After query 2")
     }
 
     func loadMessages() {
-        print("Inside load messages")
+        print("Loading messages")
         
-        // Create a query
-        let query = PFQuery(className: "Chats")
-        print(self.currentUser)
-        // Retrieve Chat (only one) whereKey "users" include currentUser and otherUser
-        query.whereKey("users", containsAllObjectsIn:[self.currentUser!, self.otherUser!])
-        query.order(byDescending: "createdAt")
-
-        print("to retrieve")
-        // Retrieve the Chat
-        query.findObjectsInBackground { (chats, error) in
-            if chats == nil {
-                print("It's nil")
+        let query1 =  PFQuery(className: "Messages")
+        query1.whereKey("sender", equalTo: self.currentUser!)
+        
+        let query2 =  PFQuery(className: "Messages")
+        query2.whereKey("sender", equalTo: self.otherUser!)
+        
+        let query = PFQuery.orQuery(withSubqueries: [query1, query2])
+        query.order(byAscending: "createdAt")
+        query.limit = 20
+        
+        query.findObjectsInBackground { (messages, error) in
+            if let error = error {
+                print(error.localizedDescription)
             } else {
-                if chats!.count != 0 {
-                    print("not empty chat")
-                    self.currentChat = chats![0]
-                    //                let messagesArray = self.currentChat["messages"] as! [PFObject]
-                    //                let sliceArray = messagesArray.suffix(20)
-                    //                self.messages = Array(sliceArray)
-                    self.messages = self.currentChat["messages"] as! [PFObject]
-                    self.conversationTable.reloadData()
-                } else if error != nil {
-                    print("error")
-                    print(error!.localizedDescription)
-                } else {
-                    print("empty chat")
-                    self.messages = []
-                    self.conversationTable.reloadData()
+                let messages = messages!
+                for message in messages {
+                    let sender = message["sender"] as! PFUser
+                    let receiver = message["receiver"] as! PFUser
+                    
+                    if sender.objectId == self.currentUser!.objectId {
+                        if receiver.objectId == self.otherUser.objectId {
+                            self.messages.append(message)
+                        }
+                    } else if sender.objectId == self.otherUser.objectId {
+                        if receiver.objectId == self.currentUser!.objectId {
+                            self.messages.append(message)
+                        }
+                    }
                 }
-                print(self.messages)
             }
+            print(self.messages)
+            self.conversationTable.reloadData()
         }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("Rows: \(messages.count)")
         return messages.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("Row: \(indexPath.row)")
         let cell = conversationTable.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageCellTableViewCell
         let cellMessage = messages[indexPath.row]
         let sender = cellMessage["sender"] as! PFUser
         let message = cellMessage["message"] as! String
 
-        cell.user.text = sender.username
+        //cell.user.text = sender.username
         if sender.objectId == currentUser!.objectId {
             cell.user.text = currentUsername
         } else {
-             cell.user.text = otherUsername
+            cell.user.text = otherUsername
         }
 
         cell.message.text = message
@@ -133,6 +153,10 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
 
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 
     @IBAction func onReturn(_ sender: Any) {
         self.dismiss(animated: true) {
@@ -145,16 +169,18 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
 
             // Create and save a new Message object
             let message = PFObject(className: "Messages")
-            message["sender"] = currentUser
-            message["receiver"] = otherUser
+            message["sender"] = self.currentUser!
+            message["receiver"] = self.otherUser!
             message["message"] = newMessage
             message.saveInBackground { (sucess, error) in
                 if (sucess) {
                     print("Message saved")
+                    self.messages.append(message)
                 } else {
                     print("Error saving message")
                 }
-
+                
+                self.conversationTable.reloadData()
             }
 
             if self.messages.count == 0 {
@@ -162,11 +188,14 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                 // Create and save a new Chat object
                 let chat = PFObject(className: "Chats")
                 chat["users"] = [currentUser, otherUser]
-                chat["lastMessage"] = newMessage
-                chat["messages"] = [newMessage]
+                chat["lastMessage"] = message
+                chat["messages"] = [message]
+                print(chat)
                 chat.saveInBackground { (sucess, error) in
                     if (sucess) {
                         print("New chat saved")
+                        self.currentChat = chat
+                        self.loadUsers()
                     } else {
                         print("Error saving new chat")
                     }
@@ -185,10 +214,11 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             }
+//            conversationTable.reloadData()
             textField.text = nil
-            conversationTable.reloadData()
         }
     }
+    
     /*
     // MARK: - Navigation
 
