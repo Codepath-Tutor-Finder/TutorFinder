@@ -259,7 +259,7 @@
                                                 <rect key="frame" x="7" y="8" width="48" height="30"/>
                                                 <state key="normal" title="Cancel"/>
                                                 <connections>
-                                                    <segue destination="g3t-OC-gDP" kind="presentation" modalPresentationStyle="fullScreen" id="Htg-Ma-VU5"/>
+                                                    <action selector="onCancelButton:" destination="53e-ss-OE2" eventType="touchUpInside" id="ySW-Vv-AmK"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -484,7 +484,6 @@
                         <outlet property="emailField" destination="bQl-uh-TwR" id="NdH-xr-re8"/>
                         <outlet property="nameField" destination="Yct-k3-pYd" id="2BN-tg-mYv"/>
                         <outlet property="profileImageView" destination="Xm7-Vd-Bd7" id="we8-JX-Eq4"/>
-                        <segue destination="g3t-OC-gDP" kind="presentation" identifier="logoutSegue" modalPresentationStyle="fullScreen" id="c0T-7o-RGF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3GQ-ZV-SYh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1041,7 +1040,6 @@
         <segue reference="1Zh-hZ-bWx"/>
         <segue reference="K49-Z8-vbZ"/>
         <segue reference="Nue-fB-VTH"/>
-        <segue reference="c0T-7o-RGF"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="paperplane.fill" catalog="system" width="128" height="121"/>

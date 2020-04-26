@@ -47,11 +47,15 @@ class LoginViewController: UIViewController {
             if user != nil {
                 UserDefaults.standard.set(true, forKey: "userLoggedIn")
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                self.usernameField.text = ""
+                self.passwordField.text = ""
             }
             else
             {
                 print("Error: \(error?.localizedDescription ?? "could not log in")")
                 self.performSegue(withIdentifier: "signUpSegue", sender: nil)
+                self.usernameField.text = ""
+                self.passwordField.text = ""
             }
         }
     }
@@ -77,6 +81,8 @@ class LoginViewController: UIViewController {
             if user != nil {
                 UserDefaults.standard.set(true, forKey: "userLoggedIn")
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                self.usernameField.text = ""
+                self.passwordField.text = ""
             }
             else
             {

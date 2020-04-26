@@ -126,6 +126,9 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
         
         dismiss(animated: true, completion: nil)
     }
+    @IBAction func onCancelButton(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
     /*
     // MARK: - Navigation
 
