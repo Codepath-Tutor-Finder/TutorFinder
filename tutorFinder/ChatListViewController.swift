@@ -145,7 +145,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         filteredChats = [PFObject]()
         filteredUsers = [PFUser]()
         
-        if searchBar.text != "" {
+        if searchBar.text != ""  {
             let keyword = searchBar.text
             var matchedUsers = [PFObject]()
             
@@ -173,15 +173,17 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                 
                 query.findObjectsInBackground { (chats, error) in
                     if chats != nil {
-                        self.filteredChats = chats!
-                        for chat in self.filteredChats {
+                        for chat in chats! {
                             let users = chat["users"] as! [PFUser]
-                            if users[0].objectId != self.currentUser?.objectId {
-                                self.filteredUsers.append(users[0])
-                            } else {
+                            if users[0].objectId == self.currentUser?.objectId {
+                                self.filteredChats.append(chat)
                                 self.filteredUsers.append(users[1])
+                            } else if users[1].objectId == self.currentUser?.objectId {
+                                self.filteredChats.append(chat)
+                                self.filteredUsers.append(users[0])
                             }
                         }
+                        print(self.filteredUsers)
                     } else {
                         let error = error
                         print(error?.localizedDescription)
@@ -215,26 +217,30 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var otherUser = PFUser()
+        let selectedVC = ChatDetailViewController()
         
         if chatSearchBar.text == "" {
-            otherUser = otherUsers[indexPath.row]
+            let otherUser = otherUsers[indexPath.row]
+            selectedVC.otherUser = otherUser
+            print(selectedVC.otherUser)
         } else {
             let message = filteredChats[indexPath.row]
             let users = message["users"] as! [PFUser]
-            if users[0] == currentUser {
-                otherUser = users[1]
+            if users[0].objectId != currentUser?.objectId {
+                let otherUser = users[0]
+                selectedVC.otherUser = otherUser
+                print(selectedVC.otherUser)
             } else {
-                otherUser = users[0]
+                let otherUser = users[1]
+                selectedVC.otherUser = otherUser
+                print(selectedVC.otherUser)
             }
         }
         
-        let selectedVC = ChatDetailViewController()
-        
         selectedVC.currentUser = currentUser!
-        selectedVC.otherUser = otherUser
-        
-        selectedVC.performSegue(withIdentifier: "ToChatSegue", sender: self)
+        print(currentUser)
+
+        self.performSegue(withIdentifier: "ToChatSegue", sender: nil)
     }
     
     /*
