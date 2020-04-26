@@ -45,6 +45,14 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
         searchBar.delegate = self
         searchBar.scopeButtonTitles = ["Name","Description","Email","Subjects"]
+        
+        // Do any additional setup after loading the view.
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let query = PFQuery(className: "Profiles")
+        query.limit = 100
+        query.order(byAscending: "name")
         let user = PFUser.current()
         let authorQuery = PFQuery(className:"Profiles")
         authorQuery.whereKey("author", equalTo: user!)
@@ -58,14 +66,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.isTutor = profile!["isTutor"] as! Bool
             }
         }
-        // Do any additional setup after loading the view.
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        let query = PFQuery(className: "Profiles")
-        query.limit = 100
-        query.order(byAscending: "name")
         query.whereKey("isTutor", notEqualTo: self.isTutor)
+        print("the initial table is now loaded")
         query.findObjectsInBackground { (profiles, error) in
             if profiles != nil {
                 self.profiles = profiles!
