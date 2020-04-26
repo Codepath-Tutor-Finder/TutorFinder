@@ -45,6 +45,21 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
         searchBar.delegate = self
         searchBar.scopeButtonTitles = ["Name","Description","Email","Subjects"]
+        /*let user = PFUser.current()
+        let authorQuery = PFQuery(className:"Profiles")
+        authorQuery.whereKey("author", equalTo: user!)
+        //let query = PFQuery.orQuery(withSubqueries: [authorQuery])
+        authorQuery.getFirstObjectInBackground { (profile,error) in
+            if error != nil
+            {
+                print("error")
+            } else
+            {
+                self.isTutor = profile!["isTutor"] as! Bool
+                //print(profile!["name"]!, ": is the name of current user!!!!!!!!!!!!")
+            }
+        }*/
+        //print(self.isTutor, ": is the value of isTutor for current user!!!!!!!!!!")
         
         // Do any additional setup after loading the view.
     }
@@ -64,10 +79,25 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
             } else
             {
                 self.isTutor = profile!["isTutor"] as! Bool
+                print(self.isTutor, ": is the value of isTutor for current user!!!!!!!!!!")
+                self.reloadTableWithTutorVal()
             }
         }
         query.whereKey("isTutor", notEqualTo: self.isTutor)
         print("the initial table is now loaded")
+        query.findObjectsInBackground { (profiles, error) in
+            if profiles != nil {
+                self.profiles = profiles!
+                self.tableView.reloadData()
+            }
+        }
+    }
+    func reloadTableWithTutorVal()
+    {
+        let query = PFQuery(className: "Profiles")
+        query.limit = 100
+        query.order(byAscending: "name")
+        query.whereKey("isTutor", notEqualTo: self.isTutor)
         query.findObjectsInBackground { (profiles, error) in
             if profiles != nil {
                 self.profiles = profiles!

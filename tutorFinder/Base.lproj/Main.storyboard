@@ -192,6 +192,9 @@
                                                     <constraint firstAttribute="height" constant="187" id="e11-YV-7sc"/>
                                                     <constraint firstAttribute="width" secondItem="Wsg-24-cGq" secondAttribute="height" multiplier="1:1" id="hrO-lC-cfb"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="2Sc-Lc-LfT" appends="YES" id="fbT-eB-y0D"/>
+                                                </connections>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ILu-km-TO7">
                                                 <rect key="frame" x="163" y="1067" width="49" height="30"/>
@@ -352,6 +355,11 @@
                 <tapGestureRecognizer id="Uw4-hL-pGI">
                     <connections>
                         <action selector="didTap:" destination="53e-ss-OE2" id="DJb-wH-LdJ"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="2Sc-Lc-LfT">
+                    <connections>
+                        <action selector="onCameraButton:" destination="53e-ss-OE2" id="hmC-0o-Npl"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

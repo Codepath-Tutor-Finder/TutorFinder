@@ -50,7 +50,14 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
             sleep(2)
         }
         let profile = PFObject(className: "Profiles")
-        profile["name"] = nameField.text!
+        if (nameField.text == "")
+        {
+            profile["name"] = usernameFromLogin
+        }
+        else
+        {
+            profile["name"] = nameField.text!
+        }
         profile["description"] = descriptionField.text!
         profile["contactEmail"] = emailContactField.text!
         if roleSegmentedControl.selectedSegmentIndex == 0
