@@ -17,19 +17,38 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
     @IBOutlet weak var roleSegmentedControl: UISegmentedControl!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var usernameField: UITextField!
+    @IBOutlet weak var passwordField: UITextField!
     
-    var username = ""
-    var password = ""
+    var usernameFromLogin = ""
+    var passwordFromLogin = ""
     var subjects = [""]
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("username is: " ,username)
-        print("password is: " ,password)
+        print("username is: " ,usernameFromLogin)
+        print("password is: " ,passwordFromLogin)
+        usernameField.text! = usernameFromLogin
+        passwordField.text! = passwordFromLogin
         // Do any additional setup after loading the view.
     }
     
 
     @IBAction func onSubmitButton(_ sender: Any) {
+        let user = PFUser()
+        user.username = usernameField.text!
+        user.password = passwordField.text!
+        user.signUpInBackground { (success,error) in
+            if success {
+                print("User was signed up success")
+            }
+            else{
+                print("Error: \(error?.localizedDescription ?? "didn't sign up")")
+            }
+        }
+        do
+        {
+            sleep(2)
+        }
         let profile = PFObject(className: "Profiles")
         profile["name"] = nameField.text!
         profile["description"] = descriptionField.text!

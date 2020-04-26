@@ -13,6 +13,8 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    var continueLogin = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,27 +47,28 @@ class LoginViewController: UIViewController {
             }
         }
         */
-        let user = PFUser()
-        user.username = usernameField.text!
-        user.password = passwordField.text!
+        let username = usernameField.text!
+        let password = passwordField.text!
         
-        user.signUpInBackground { (success,error) in
-            if success {
-                print("User was signed up success")
-                
+        PFUser.logInWithUsername(inBackground: username, password: password)
+        {
+            (user,error) in
+            if user != nil {
+                self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }
-            else{
-                print("Error: \(error?.localizedDescription ?? "didn't sign up")")
+            else
+            {
+                print("Error: \(error?.localizedDescription ?? "could not log in")")
+                self.performSegue(withIdentifier: "signUpSegue", sender: nil)
             }
         }
-        self.performSegue(withIdentifier: "signUpSegue", sender: nil)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "signUpSegue")
         {
         let vc = segue.destination as! CameraRegistrationViewController
-        vc.username = usernameField.text!
-        vc.password = passwordField.text!
+        vc.usernameFromLogin = usernameField.text!
+        vc.passwordFromLogin = passwordField.text!
         }
         
     }
