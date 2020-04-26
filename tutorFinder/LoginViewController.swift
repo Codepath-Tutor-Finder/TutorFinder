@@ -31,22 +31,13 @@ class LoginViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
-    @IBAction func onSignUp(_ sender: Any) {
-        /*
-        let user = PFUser()
-        user.username = usernameField.text
-        user.password = passwordField.text
-        
-        user.signUpInBackground { (success,error) in
-            if success {
-                self.performSegue(withIdentifier: "signUpSegue", sender: nil)
-            }
-            else{
-                print("Error: \(error?.localizedDescription)")
-            }
+    override func viewDidAppear(_ animated: Bool) {
+        if UserDefaults.standard.bool(forKey: "userLoggedIn") == true
+        {
+            self.performSegue(withIdentifier: "loginSegue", sender: nil)
         }
-        */
+    }
+    @IBAction func onSignUp(_ sender: Any) {
         let username = usernameField.text!
         let password = passwordField.text!
         
@@ -54,6 +45,7 @@ class LoginViewController: UIViewController {
         {
             (user,error) in
             if user != nil {
+                UserDefaults.standard.set(true, forKey: "userLoggedIn")
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }
             else
@@ -83,6 +75,7 @@ class LoginViewController: UIViewController {
         {
             (user,error) in
             if user != nil {
+                UserDefaults.standard.set(true, forKey: "userLoggedIn")
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }
             else

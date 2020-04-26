@@ -54,6 +54,7 @@ class ProfileViewController: UIViewController {
         {
             print("logged out successfully")
             performSegue(withIdentifier: "logoutSegue", sender: nil)
+            UserDefaults.standard.set(false, forKey: "userLoggedIn")
         }
         else
         {
