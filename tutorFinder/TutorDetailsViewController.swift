@@ -16,13 +16,28 @@ class TutorDetailsViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var contactLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    
+    @IBOutlet weak var subjectsLabel: UILabel!
+    var subjects = [""]
     var profile: PFObject!
     override func viewDidLoad() {
         super.viewDidLoad()
         nameLabel.text = profile["name"] as? String
         descriptionLabel.text = profile["description"] as? String
         contactLabel.text = profile["contactEmail"] as? String
+        subjects = profile["subjects"] as! [String]
+        var str = ""
+        for subject in subjects
+        {
+            if (subject == subjects[subjects.endIndex - 1])
+            {
+                str = str + subject
+            }
+            else
+            {
+                str = str + subject + ", "
+            }
+        }
+        subjectsLabel.text = str
         let imageFile = profile["profilePic"] as! PFFileObject
         let urlString = imageFile.url!
         let url = URL(string: urlString)!
