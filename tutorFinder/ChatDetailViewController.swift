@@ -71,7 +71,7 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         let query = PFQuery(className: "Chats")
         print(self.currentUser)
         // Retrieve Chat (only one) whereKey "users" include currentUser and otherUser
-        query.whereKey("users", containsAllObjectsIn:[self.currentUser!])
+        query.whereKey("users", containsAllObjectsIn:[self.currentUser!, self.otherUser!])
         query.order(byDescending: "createdAt")
 
         print("to retrieve")
