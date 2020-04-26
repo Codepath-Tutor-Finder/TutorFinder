@@ -90,29 +90,21 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.searchBar.resignFirstResponder()
-        let nameQuery = PFQuery(className: "Profiles")
-        nameQuery.whereKey("name", contains: searchBar.text!)
-        
-        let descQuery = PFQuery(className: "Profiles")
-        descQuery.whereKey("description", contains: searchBar.text!)
-        
-        let mailQuery = PFQuery(className: "Profiles")
-        descQuery.whereKey("contactEmail", contains: searchBar.text!)
-        
-        let subjects = PFQuery(className: "Profiles")
-        descQuery.whereKey("subjects", contains: searchBar.text!)
-        var query = PFQuery()
+        let query = PFQuery(className: "Profiles")
         switch searchBar.selectedScopeButtonIndex {
         case 0:
-            query = PFQuery.orQuery(withSubqueries: [nameQuery])
+            query.whereKey("name", contains: searchBar.text!)
         case 1:
-            query = PFQuery.orQuery(withSubqueries: [descQuery])
+            query.whereKey("description", contains: searchBar.text!)
         case 2:
-            query = PFQuery.orQuery(withSubqueries: [mailQuery])
+            query.whereKey("contactEmail", contains: searchBar.text!)
         case 3:
-            query = PFQuery.orQuery(withSubqueries: [subjects])
+            var subject = [""]
+            subject.remove(at: 0)
+            subject.append(searchBar.text!)
+            query.whereKey("subjects", containsAllObjectsIn: subject)
         default:
-            query = PFQuery.orQuery(withSubqueries: [nameQuery])
+            query.whereKey("name", contains: searchBar.text!)
         }
         query.whereKey("isTutor", notEqualTo: self.isTutor)
         query.findObjectsInBackground { (profiles,error) in
