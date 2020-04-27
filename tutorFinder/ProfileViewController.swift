@@ -14,6 +14,7 @@ class ProfileViewController: UIViewController {
 
     @IBOutlet weak var profileImageView: UIImageView!
 
+    @IBOutlet weak var subjectsLabel: UILabel!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var descriptionField: UITextField!
@@ -82,16 +83,22 @@ class ProfileViewController: UIViewController {
                 let url = URL(string: urlString)!
                 
                 self.profileImageView.af_setImage(withURL: url)
+                let subjects = profile!["subjects"] as! [String]
+                var str = ""
+                for subject in subjects
+                {
+                    if (subject == subjects[subjects.endIndex - 1])
+                    {
+                        str = str + subject
+                    }
+                    else
+                    {
+                        str = str + subject + ", "
+                    }
+                }
+                self.subjectsLabel.text = str
             }
         }
-        /*
-        nameField.text = PFUser.name as? String
-        descriptionField.text = profile["description"] as? String
-        let imageFile = profile["profilePic"] as! PFFileObject
-        let urlString = imageFile.url!
-        let url = URL(string: urlString)!
-        profileImageView.af_setImage(withURL: url)
-*/
         // Do any additional setup after loading the view.
     }
 
@@ -107,15 +114,3 @@ class ProfileViewController: UIViewController {
     */
 
 }
-
-/*
- self.nameField.text = object["name"] as? String
- self.emailField.text = object["contactEmail"] as? String
- self.descriptionField.text = object["description"] as? String
- 
- let imageFile = object["profilePic"] as! PFFileObject
- let urlString = imageFile.url!
- let url = URL(string: urlString)!
- 
- self.profileImageView.af_setImage(withURL: url)
- */

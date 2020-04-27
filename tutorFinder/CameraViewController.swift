@@ -39,6 +39,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                     }
                 }
             }
+        dismiss(animated: true, completion: nil)
         }
     
     @IBAction func onCameraButton(_ sender: Any) {
