@@ -70,8 +70,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         query.order(byAscending: "name")
         let user = PFUser.current()
         let authorQuery = PFQuery(className:"Profiles")
-        authorQuery.whereKey("author", equalTo: user!)
-        //let query = PFQuery.orQuery(withSubqueries: [authorQuery])
+        authorQuery.whereKey("author", equalTo: user as Any)
         authorQuery.getFirstObjectInBackground { (profile,error) in
             if error != nil
             {

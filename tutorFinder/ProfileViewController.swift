@@ -19,6 +19,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var descriptionField: UITextField!
     
+    var subjects = [""]
+    
     @IBAction func onSave(_ sender: Any) {
         let user = PFUser.current()
         let query = PFQuery(className:"Profiles")
@@ -35,6 +37,7 @@ class ProfileViewController: UIViewController {
                 let imageData = self.profileImageView.image!.pngData()
                 let file = PFFileObject(name: "image.png", data: imageData!)
                 profile!["profilePic"] = file
+                profile!["subjects"] = self.subjects
                 profile!.saveInBackground { (success,error) in
                     if success {
                         print("saved user data")
@@ -66,7 +69,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         let user = PFUser.current()
         let query = PFQuery(className:"Profiles")
-        query.whereKey("author", equalTo: user!)
+        query.whereKey("author", equalTo: user as Any)
         //let query = PFQuery.orQuery(withSubqueries: [authorQuery])
         query.getFirstObjectInBackground { (profile,error) in
             if error != nil
@@ -101,7 +104,18 @@ class ProfileViewController: UIViewController {
         }
         // Do any additional setup after loading the view.
     }
-
+    
+    @IBAction func onSubjectButton(_ sender: Any) {
+        self.performSegue(withIdentifier: "chooseSubjectSegue", sender: nil)
+    }
+    
+    @IBAction func unwindToVC(_ unwindSegue: UIStoryboardSegue) {
+        if let sourceViewController = unwindSegue.source as? SubjectSelectionViewController
+        {
+            subjects = sourceViewController.selectedSubjects
+        }
+        // Use data from the view controller which initiated the unwind segue
+    }
 
     /*
     // MARK: - Navigation
