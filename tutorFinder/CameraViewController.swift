@@ -27,7 +27,6 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                     let imageData = self.cameraImageView.image!.pngData()
                     let file = PFFileObject(name: "image.png", data: imageData!)
                     profile!["profilePic"] = file
-                    
                     profile!.saveInBackground { (success,error) in
                         if success {
                             print("saved user data")

@@ -34,13 +34,38 @@ class ProfileViewController: UIViewController {
                 profile!["name"] = self.nameField.text
                 profile!["contactEmail"] = self.emailField.text
                 profile!["description"] = self.descriptionField.text
-                let imageData = self.profileImageView.image!.pngData()
-                let file = PFFileObject(name: "image.png", data: imageData!)
-                profile!["profilePic"] = file
-                profile!["subjects"] = self.subjects
+                //let imageData = self.profileImageView.image!.pngData()
+                //let file = PFFileObject(name: "image.png", data: imageData!)
+                //profile!["profilePic"] = file
+                if (!self.subjects.isEmpty) {
+                    profile!["subjects"] = self.subjects
+                }
                 profile!.saveInBackground { (success,error) in
                     if success {
                         print("saved user data")
+                        self.nameField.text = profile!["name"] as? String
+                        self.emailField.text = profile!["contactEmail"] as? String
+                        self.descriptionField.text = profile!["description"] as? String
+                        
+                        let imageFile = profile!["profilePic"] as! PFFileObject
+                        let urlString = imageFile.url!
+                        let url = URL(string: urlString)!
+                        
+                        self.profileImageView.af_setImage(withURL: url)
+                        let subjects = profile!["subjects"] as! [String]
+                        var str = ""
+                        for subject in subjects
+                        {
+                            if (subject == subjects[subjects.endIndex - 1])
+                            {
+                                str = str + subject
+                            }
+                            else
+                            {
+                                str = str + subject + ", "
+                            }
+                        }
+                        self.subjectsLabel.text = str
                     }
                     else
                     {
@@ -49,6 +74,8 @@ class ProfileViewController: UIViewController {
                 }
             }
         }
+ 
+        //self.viewDidLoad()
     }
     
     @IBAction func onLogOutButton(_ sender: Any) {
@@ -116,6 +143,11 @@ class ProfileViewController: UIViewController {
         }
         // Use data from the view controller which initiated the unwind segue
     }
+    
+    @IBAction func tapOut(_ sender: Any) {
+        view.endEditing(true)
+    }
+    
 
     /*
     // MARK: - Navigation
