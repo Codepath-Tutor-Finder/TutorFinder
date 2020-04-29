@@ -86,7 +86,6 @@ class CameraRegistrationViewController: UIViewController, UIImagePickerControlle
                 print("Error: \(error?.localizedDescription ?? "didn't save data")")
             }
         }
-        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func onCameraButton(_ sender: Any) {
