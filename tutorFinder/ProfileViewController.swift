@@ -84,7 +84,7 @@ class ProfileViewController: UIViewController {
         if (currUser == nil)
         {
             print("logged out successfully")
-            self.dismiss(animated: true, completion: nil)
+            performSegue(withIdentifier: "logoutSegue", sender: nil)
             UserDefaults.standard.set(false, forKey: "userLoggedIn")
         }
         else

@@ -501,7 +501,6 @@
                         <barButtonItem key="leftBarButtonItem" title="Log Out" id="VFK-0S-nXj">
                             <connections>
                                 <action selector="onLogOutButton:" destination="Q12-0W-4Fv" id="JMb-0d-LFu"/>
-                                <segue destination="g3t-OC-gDP" kind="presentation" modalPresentationStyle="fullScreen" id="7Yi-dw-sdZ"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Edit Image" id="k3w-pM-UUd">
@@ -517,6 +516,7 @@
                         <outlet property="nameField" destination="Yct-k3-pYd" id="2BN-tg-mYv"/>
                         <outlet property="profileImageView" destination="Xm7-Vd-Bd7" id="we8-JX-Eq4"/>
                         <outlet property="subjectsLabel" destination="MvV-Ba-uCw" id="EKR-s6-QUV"/>
+                        <segue destination="g3t-OC-gDP" kind="presentation" identifier="logoutSegue" modalPresentationStyle="fullScreen" id="Sm5-3l-gkP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3GQ-ZV-SYh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1089,7 +1089,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="ESZ-1r-gmE"/>
-        <segue reference="K49-Z8-vbZ"/>
+        <segue reference="CWz-9f-19h"/>
         <segue reference="Nue-fB-VTH"/>
     </inferredMetricsTieBreakers>
     <resources>
