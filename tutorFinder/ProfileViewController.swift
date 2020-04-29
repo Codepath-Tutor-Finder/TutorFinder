@@ -92,8 +92,51 @@ class ProfileViewController: UIViewController {
             print("user not logged out")
         }
     }
+    override func viewDidAppear(_ animated: Bool) {
+        print("this loads first")
+        super.viewDidAppear(animated)
+        let user = PFUser.current()
+        let query = PFQuery(className:"Profiles")
+        query.whereKey("author", equalTo: user as Any)
+        //let query = PFQuery.orQuery(withSubqueries: [authorQuery])
+        query.getFirstObjectInBackground { (profile,error) in
+            if error != nil
+            {
+                print("error")
+            } else
+            {
+                self.nameField.text = profile!["name"] as? String
+                self.emailField.text = profile!["contactEmail"] as? String
+                self.descriptionField.text = profile!["description"] as? String
+                
+                let imageFile = profile!["profilePic"] as! PFFileObject
+                let urlString = imageFile.url!
+                let url = URL(string: urlString)!
+                
+                self.profileImageView.af_setImage(withURL: url)
+                let subjects = profile!["subjects"] as! [String]
+                var str = ""
+                for subject in subjects
+                {
+                    if (subject == subjects[subjects.endIndex - 1])
+                    {
+                        str = str + subject
+                    }
+                    else
+                    {
+                        str = str + subject + ", "
+                    }
+                }
+                self.subjectsLabel.text = str
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        do
+        {
+            sleep(2)
+        }
         let user = PFUser.current()
         let query = PFQuery(className:"Profiles")
         query.whereKey("author", equalTo: user as Any)
