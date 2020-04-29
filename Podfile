@@ -8,6 +8,7 @@ target 'tutorFinder' do
   # Pods for tutorFinder
   pod "Parse"
   pod "AlamofireImage"
+  pod "MessageInputBar"
   target 'tutorFinderTests' do
     inherit! :search_paths
     # Pods for testing

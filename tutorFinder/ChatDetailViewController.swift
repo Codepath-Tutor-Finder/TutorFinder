@@ -9,8 +9,9 @@
 import UIKit
 import AlamofireImage
 import Parse
+import MessageInputBar
 
-class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MessageInputBarDelegate {
     
     var currentUser : PFUser!
     var otherUser : PFUser!
@@ -23,14 +24,18 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var conversationTable: UITableView!
     
+    let commentBar = MessageInputBar()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.isModalInPresentation = true
+
         conversationTable.delegate = self
         conversationTable.dataSource = self
 
         conversationTable.estimatedRowHeight = 100
         conversationTable.rowHeight =  UITableView.automaticDimension
-//        conversationTable.rowHeight = 130
         conversationTable.separatorStyle = .none
         
         let query = PFQuery(className: "Chats")
@@ -46,6 +51,18 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
             }
         }
+        
+        conversationTable.keyboardDismissMode = .interactive
+        commentBar.sendButton.title = "Send"
+        commentBar.delegate = self
+    }
+    
+    override var inputAccessoryView: UIView? {
+        return commentBar
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -66,7 +83,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         }
 
         let query2 = PFQuery(className: "Profiles")
-        print(otherUser)
         query2.whereKey("author", equalTo: otherUser!)
         query2.findObjectsInBackground { (users, error) in
             if let users = users {
@@ -118,12 +134,10 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //print("Rows: \(messages.count)")
         return messages.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //print("Row: \(indexPath.row)")
         let cell = conversationTable.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageCellTableViewCell
         let cellMessage = messages[indexPath.row]
         let sender = cellMessage["sender"] as! PFUser
@@ -181,6 +195,7 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
     }
 
     @IBAction func onReturn(_ sender: Any) {
@@ -189,6 +204,60 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
 
+    func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
+        //Create a message
+        if let newMessage = commentBar.inputTextView.text {
+            
+            // Create and save a new Message object
+            let message = PFObject(className: "Messages")
+            message["sender"] = self.currentUser!
+            message["receiver"] = self.otherUser!
+            message["message"] = newMessage
+            message.saveInBackground { (sucess, error) in
+                if (sucess) {
+                    print("Message saved")
+                    self.messages.append(message)
+                } else {
+                    print("Error saving message")
+                }
+                
+                self.conversationTable.reloadData()
+            }
+            
+            if self.messages.count == 0 {
+                
+                // Create and save a new Chat object
+                let chat = PFObject(className: "Chats")
+                chat["users"] = [currentUser, otherUser]
+                chat["lastMessage"] = message
+                chat["messages"] = [message]
+                chat.saveInBackground { (sucess, error) in
+                    if (sucess) {
+                        print("New chat saved")
+                        self.currentChat = chat
+                        self.loadUsers()
+                    } else {
+                        print("Error saving new chat")
+                    }
+                }
+            } else {
+                
+                // Update the current Chat object
+                currentChat["lastMessage"] = message
+                currentChat.add(message, forKey: "messages")
+                currentChat.saveInBackground { (success, error) in
+                    if (success) {
+                        print("Chat saved")
+                    } else {
+                        print("Error saving chat")
+                    }
+                }
+            }
+        }
+        // Clear and dismiss the input bar
+        commentBar.inputTextView.text = nil
+        commentBar.inputTextView.resignFirstResponder()
+    }
     @IBAction func onSendMessage(_ sender: Any) {
         if let newMessage = textField.text {
 
@@ -215,7 +284,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                 chat["users"] = [currentUser, otherUser]
                 chat["lastMessage"] = message
                 chat["messages"] = [message]
-                print(chat)
                 chat.saveInBackground { (sucess, error) in
                     if (sucess) {
                         print("New chat saved")
@@ -228,7 +296,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
             } else {
 
                 // Update the current Chat object
-                //currentChat["lastMessage"] = textField.text
                 currentChat["lastMessage"] = message
                 currentChat.add(message, forKey: "messages")
                 currentChat.saveInBackground { (success, error) in
@@ -239,7 +306,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             }
-//            conversationTable.reloadData()
             textField.text = nil
         }
     }
