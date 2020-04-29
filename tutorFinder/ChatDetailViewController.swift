@@ -55,6 +55,9 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         conversationTable.keyboardDismissMode = .interactive
         commentBar.sendButton.title = "Send"
         commentBar.delegate = self
+        
+        let verticalConstraint = NSLayoutConstraint(item: conversationTable, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 200)
+        view.addConstraints([verticalConstraint])
     }
     
     override var inputAccessoryView: UIView? {
