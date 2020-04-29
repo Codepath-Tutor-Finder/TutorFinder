@@ -12,7 +12,7 @@ class SubjectSelectionViewController: UIViewController, UITableViewDelegate, UIT
 
 
     @IBOutlet weak var subjectTableView: UITableView!
-    let subjects = ["Computer Science", "Physics", "Calculus", "TestSubject"]
+    let subjects = ["Computer Science", "Physics", "Calculus", "English"]
     var selectedSubjects = [""]
     override func viewDidLoad() {
         super.viewDidLoad()
