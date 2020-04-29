@@ -24,7 +24,12 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var conversationTable: UITableView!
     
+    @IBOutlet weak var firstContraint: NSLayoutConstraint!
+    @IBOutlet weak var secondConstraint: NSLayoutConstraint!
+    
+    
     let commentBar = MessageInputBar()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,8 +61,35 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         commentBar.sendButton.title = "Send"
         commentBar.delegate = self
         
-        let verticalConstraint = NSLayoutConstraint(item: conversationTable, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 200)
-        view.addConstraints([verticalConstraint])
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(keyBoardWillHide(note:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        center.addObserver(self, selector: #selector(keyBoardWillShow(note:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        //let tap = UITapGestureRecognizer(target: self, action: #selector(self.keyBoardWillShow(note:)))
+        //commentBar.addGestureRecognizer(tap)
+//        commentBar.inputTextView.addGestureRecognizer(tap)
+    }
+    
+    @objc func tapHandler (_ sender: UITapGestureRecognizer? = nil) {
+        print(commentBar.accessibilityPerformMagicTap())
+        firstContraint.priority = .defaultLow
+        secondConstraint.priority = .defaultHigh
+        self.view.layoutIfNeeded()
+
+    }
+    
+    @objc func keyBoardWillShow (note:Notification) {
+        if commentBar.inputTextView.accessibilityPerformMagicTap() == true {
+            firstContraint.priority = .defaultLow
+            secondConstraint.priority = .defaultHigh
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func keyBoardWillHide (note:Notification) {
+        firstContraint.priority = .defaultHigh
+        secondConstraint.priority = .defaultLow
+        self.view.layoutIfNeeded()
     }
     
     override var inputAccessoryView: UIView? {
@@ -131,8 +163,11 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             }
-            print(self.messages)
             self.conversationTable.reloadData()
+            if self.messages.count >= 1 {
+                let indexPath = NSIndexPath(row: messages!.count-1, section: 0)
+                self.conversationTable.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
+            }
         }
     }
 
@@ -158,11 +193,7 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.bubbleView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         
         if currentUser!.objectId == sender.objectId {
-//            cell.bubbleView.translatesAutoresizingMaskIntoConstraints = false
-//            cell.bubbleLeadingConstraint = NSLayoutConstraint(item: cell.bubbleView, attribute: .leading, relatedBy: .equal, toItem: cell.contentView, attribute: .leading, multiplier: 1.0, constant: 45)
-//            cell.bubbleView.translatesAutoresizingMaskIntoConstraints = true
-            
-                    cell.bubbleView.backgroundColor = #colorLiteral(red: 0.3921568627, green: 0.7137254902, blue: 0.6745098039, alpha: 1)
+            cell.bubbleView.backgroundColor = #colorLiteral(red: 0.3921568627, green: 0.7137254902, blue: 0.6745098039, alpha: 1)
             cell.message.textColor = #colorLiteral(red: 0.9882352941, green: 1, blue: 0.9921568627, alpha: 1)
 //            cell.user.textAlignment = .right
 //            cell.message.textAlignment = .right
@@ -187,12 +218,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.bubbleView.sizeToFit()
         cell.bubbleView.layoutIfNeeded()
 
-//        if currentUser!.objectId == sender.objectId {
-//            cell.user.textAlignment = .right
-//            //cell.bubbleViewLeadingConstraint.isActive = false
-//            //cell.message.textAlignment = .right
-//        }
-
         return cell
     }
     
@@ -206,7 +231,7 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
             print("Return successful")
         }
     }
-
+    
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
         //Create a message
         if let newMessage = commentBar.inputTextView.text {
@@ -225,6 +250,10 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
                 
                 self.conversationTable.reloadData()
+                if self.messages.count >= 1 {
+                    let indexPath = NSIndexPath(row: self.messages.count-1, section: 0)
+                    self.conversationTable.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
+                }
             }
             
             if self.messages.count == 0 {
@@ -260,57 +289,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         // Clear and dismiss the input bar
         commentBar.inputTextView.text = nil
         commentBar.inputTextView.resignFirstResponder()
-    }
-    @IBAction func onSendMessage(_ sender: Any) {
-        if let newMessage = textField.text {
-
-            // Create and save a new Message object
-            let message = PFObject(className: "Messages")
-            message["sender"] = self.currentUser!
-            message["receiver"] = self.otherUser!
-            message["message"] = newMessage
-            message.saveInBackground { (sucess, error) in
-                if (sucess) {
-                    print("Message saved")
-                    self.messages.append(message)
-                } else {
-                    print("Error saving message")
-                }
-                
-                self.conversationTable.reloadData()
-            }
-
-            if self.messages.count == 0 {
-
-                // Create and save a new Chat object
-                let chat = PFObject(className: "Chats")
-                chat["users"] = [currentUser, otherUser]
-                chat["lastMessage"] = message
-                chat["messages"] = [message]
-                chat.saveInBackground { (sucess, error) in
-                    if (sucess) {
-                        print("New chat saved")
-                        self.currentChat = chat
-                        self.loadUsers()
-                    } else {
-                        print("Error saving new chat")
-                    }
-                }
-            } else {
-
-                // Update the current Chat object
-                currentChat["lastMessage"] = message
-                currentChat.add(message, forKey: "messages")
-                currentChat.saveInBackground { (success, error) in
-                    if (success) {
-                        print("Chat saved")
-                    } else {
-                        print("Error saving chat")
-                    }
-                }
-            }
-            textField.text = nil
-        }
     }
     
     /*

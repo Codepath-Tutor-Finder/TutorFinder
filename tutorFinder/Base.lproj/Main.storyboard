@@ -773,8 +773,6 @@
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration" identifier="Message Cell"/>
                                         <connections>
-                                            <outlet property="bubbleLeadingConstraint" destination="67E-qj-5vG" id="j3Z-gy-S0d"/>
-                                            <outlet property="bubbleTrailingContraint" destination="67E-qj-5vG" id="JNW-4H-gMA"/>
                                             <outlet property="bubbleView" destination="xpJ-DD-Kiu" id="gnu-0A-II7"/>
                                             <outlet property="message" destination="jOS-H3-sA7" id="7YD-QW-ZDD"/>
                                             <outlet property="user" destination="art-8f-Tr1" id="fYU-fr-IPA"/>
@@ -786,6 +784,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="EPR-qS-gxH" firstAttribute="bottom" secondItem="2Bx-AP-S4c" secondAttribute="bottom" priority="250" constant="350" id="1fD-6f-NeI"/>
                             <constraint firstAttribute="trailing" secondItem="2Bx-AP-S4c" secondAttribute="trailing" id="Bce-R2-G76"/>
                             <constraint firstItem="EPR-qS-gxH" firstAttribute="bottom" secondItem="2Bx-AP-S4c" secondAttribute="bottom" constant="50" id="Opn-Vn-ZYm"/>
                             <constraint firstItem="2Bx-AP-S4c" firstAttribute="top" secondItem="6GS-6c-O0W" secondAttribute="top" id="TRK-eP-m0s"/>
@@ -806,6 +805,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="conversationTable" destination="2Bx-AP-S4c" id="xYD-XW-LY1"/>
+                        <outlet property="firstContraint" destination="Opn-Vn-ZYm" id="VXd-ae-Lfx"/>
+                        <outlet property="secondConstraint" destination="1fD-6f-NeI" id="Ga2-Hc-jmw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KMr-gc-0hc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
