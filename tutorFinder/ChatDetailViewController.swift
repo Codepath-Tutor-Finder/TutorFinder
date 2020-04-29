@@ -28,14 +28,12 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         conversationTable.delegate = self
         conversationTable.dataSource = self
 
-//        conversationTable.estimatedRowHeight = 150
-//        conversationTable.rowHeight = UITableView.automaticDimension
-        conversationTable.rowHeight = 130
+        conversationTable.estimatedRowHeight = 100
+        conversationTable.rowHeight =  UITableView.automaticDimension
+//        conversationTable.rowHeight = 130
         conversationTable.separatorStyle = .none
         
         let query = PFQuery(className: "Chats")
-        print(self.currentUser!)
-        print(self.otherUser!)
         
         // Retrieve Chat (only one) whereKey "users" include currentUser and otherUser
         query.whereKey("users", containsAllObjectsIn:[self.currentUser!, self.otherUser!])
@@ -91,14 +89,14 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         query2.whereKey("sender", equalTo: self.otherUser!)
         
         let query = PFQuery.orQuery(withSubqueries: [query1, query2])
-        query.order(byAscending: "createdAt")
+        query.order(byDescending: "createdAt")
         query.limit = 20
         
         query.findObjectsInBackground { (messages, error) in
             if let error = error {
                 print(error.localizedDescription)
             } else {
-                let messages = messages!
+                let messages = messages!.reversed()
                 for message in messages {
                     let sender = message["sender"] as! PFUser
                     let receiver = message["receiver"] as! PFUser
@@ -120,12 +118,12 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Rows: \(messages.count)")
+        //print("Rows: \(messages.count)")
         return messages.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("Row: \(indexPath.row)")
+        //print("Row: \(indexPath.row)")
         let cell = conversationTable.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageCellTableViewCell
         let cellMessage = messages[indexPath.row]
         let sender = cellMessage["sender"] as! PFUser
@@ -139,17 +137,44 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         }
 
         cell.message.text = message
+        
+        cell.bubbleView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        
+        if currentUser!.objectId == sender.objectId {
+//            cell.bubbleView.translatesAutoresizingMaskIntoConstraints = false
+//            cell.bubbleLeadingConstraint = NSLayoutConstraint(item: cell.bubbleView, attribute: .leading, relatedBy: .equal, toItem: cell.contentView, attribute: .leading, multiplier: 1.0, constant: 45)
+//            cell.bubbleView.translatesAutoresizingMaskIntoConstraints = true
+            
+                    cell.bubbleView.backgroundColor = #colorLiteral(red: 0.3921568627, green: 0.7137254902, blue: 0.6745098039, alpha: 1)
+            cell.message.textColor = #colorLiteral(red: 0.9882352941, green: 1, blue: 0.9921568627, alpha: 1)
+//            cell.user.textAlignment = .right
+//            cell.message.textAlignment = .right
+        }
+        
+        let constraintRect = CGSize(width: 255, height: 1000)
 
-        cell.bubbleView.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
-        cell.bubbleView.layer.cornerRadius = 16
+        let boundingBox = cell.message.text!.boundingRect(with: constraintRect, options: .usesFontLeading, attributes: [.font: cell.message.font], context: nil)
+
+        let messageSize = CGSize(width: ceil(boundingBox.width), height: ceil(boundingBox.height))
+        
+        cell.message.frame.size = CGSize(width: ceil(boundingBox.width), height: ceil(boundingBox.height))
+
+        let bubbleSize = CGSize(width: cell.message.frame.size.width + 20, height: cell.message.frame.size.height)
+
+        let currentBubble = cell.bubbleView.frame.size
+
+        cell.bubbleView.frame.size = CGSize(width: bubbleSize.width, height: currentBubble.height)
+        
+        cell.bubbleView.layer.cornerRadius = 12
         cell.bubbleView.clipsToBounds = true
         cell.bubbleView.sizeToFit()
         cell.bubbleView.layoutIfNeeded()
 
-        if currentUser!.objectId == sender.objectId {
-            cell.user.textAlignment = .right
-            cell.message.textAlignment = .right
-        }
+//        if currentUser!.objectId == sender.objectId {
+//            cell.user.textAlignment = .right
+//            //cell.bubbleViewLeadingConstraint.isActive = false
+//            //cell.message.textAlignment = .right
+//        }
 
         return cell
     }

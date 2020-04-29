@@ -238,8 +238,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                     vc.otherUser = filteredUsers[i]
                 }
                 vc.currentUser = currentUser
-                print("Current User: \(vc.currentUser)")
-                print("Other user: \(vc.otherUser)")
             }
         }
     }
