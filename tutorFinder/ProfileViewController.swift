@@ -187,10 +187,6 @@ class ProfileViewController: UIViewController {
         // Use data from the view controller which initiated the unwind segue
     }
     
-    @IBAction func tapOut(_ sender: Any) {
-        view.endEditing(true)
-    }
-    
 
     /*
     // MARK: - Navigation
