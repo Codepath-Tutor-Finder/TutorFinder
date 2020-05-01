@@ -9,8 +9,9 @@
 import UIKit
 import AlamofireImage
 import Parse
+import MessageInputBar
 
-class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MessageInputBarDelegate {
     
     var currentUser : PFUser!
     var otherUser : PFUser!
@@ -23,14 +24,23 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var conversationTable: UITableView!
     
+    @IBOutlet weak var firstContraint: NSLayoutConstraint!
+    @IBOutlet weak var secondConstraint: NSLayoutConstraint!
+    
+    
+    let commentBar = MessageInputBar()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.isModalInPresentation = true
+
         conversationTable.delegate = self
         conversationTable.dataSource = self
 
         conversationTable.estimatedRowHeight = 100
         conversationTable.rowHeight =  UITableView.automaticDimension
-//        conversationTable.rowHeight = 130
         conversationTable.separatorStyle = .none
         
         let query = PFQuery(className: "Chats")
@@ -46,6 +56,48 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
             }
         }
+        
+        conversationTable.keyboardDismissMode = .interactive
+        commentBar.sendButton.title = "Send"
+        commentBar.delegate = self
+        
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(keyBoardWillHide(note:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        center.addObserver(self, selector: #selector(keyBoardWillShow(note:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        //let tap = UITapGestureRecognizer(target: self, action: #selector(self.keyBoardWillShow(note:)))
+        //commentBar.addGestureRecognizer(tap)
+//        commentBar.inputTextView.addGestureRecognizer(tap)
+    }
+    
+    @objc func tapHandler (_ sender: UITapGestureRecognizer? = nil) {
+        print(commentBar.accessibilityPerformMagicTap())
+        firstContraint.priority = .defaultLow
+        secondConstraint.priority = .defaultHigh
+        self.view.layoutIfNeeded()
+
+    }
+    
+    @objc func keyBoardWillShow (note:Notification) {
+        if commentBar.inputTextView.accessibilityPerformMagicTap() == true {
+            firstContraint.priority = .defaultLow
+            secondConstraint.priority = .defaultHigh
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func keyBoardWillHide (note:Notification) {
+        firstContraint.priority = .defaultHigh
+        secondConstraint.priority = .defaultLow
+        self.view.layoutIfNeeded()
+    }
+    
+    override var inputAccessoryView: UIView? {
+        return commentBar
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -66,7 +118,6 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         }
 
         let query2 = PFQuery(className: "Profiles")
-        print(otherUser)
         query2.whereKey("author", equalTo: otherUser!)
         query2.findObjectsInBackground { (users, error) in
             if let users = users {
@@ -112,18 +163,19 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             }
-            print(self.messages)
             self.conversationTable.reloadData()
+            if self.messages.count >= 1 {
+                let indexPath = NSIndexPath(row: messages!.count-1, section: 0)
+                self.conversationTable.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
+            }
         }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //print("Rows: \(messages.count)")
         return messages.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //print("Row: \(indexPath.row)")
         let cell = conversationTable.dequeueReusableCell(withIdentifier: "MessageCell") as! MessageCellTableViewCell
         let cellMessage = messages[indexPath.row]
         let sender = cellMessage["sender"] as! PFUser
@@ -141,11 +193,7 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.bubbleView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         
         if currentUser!.objectId == sender.objectId {
-//            cell.bubbleView.translatesAutoresizingMaskIntoConstraints = false
-//            cell.bubbleLeadingConstraint = NSLayoutConstraint(item: cell.bubbleView, attribute: .leading, relatedBy: .equal, toItem: cell.contentView, attribute: .leading, multiplier: 1.0, constant: 45)
-//            cell.bubbleView.translatesAutoresizingMaskIntoConstraints = true
-            
-                    cell.bubbleView.backgroundColor = #colorLiteral(red: 0.3921568627, green: 0.7137254902, blue: 0.6745098039, alpha: 1)
+            cell.bubbleView.backgroundColor = #colorLiteral(red: 0.3921568627, green: 0.7137254902, blue: 0.6745098039, alpha: 1)
             cell.message.textColor = #colorLiteral(red: 0.9882352941, green: 1, blue: 0.9921568627, alpha: 1)
 //            cell.user.textAlignment = .right
 //            cell.message.textAlignment = .right
@@ -170,17 +218,12 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.bubbleView.sizeToFit()
         cell.bubbleView.layoutIfNeeded()
 
-//        if currentUser!.objectId == sender.objectId {
-//            cell.user.textAlignment = .right
-//            //cell.bubbleViewLeadingConstraint.isActive = false
-//            //cell.message.textAlignment = .right
-//        }
-
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
     }
 
     @IBAction func onReturn(_ sender: Any) {
@@ -188,10 +231,11 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
             print("Return successful")
         }
     }
-
-    @IBAction func onSendMessage(_ sender: Any) {
-        if let newMessage = textField.text {
-
+    
+    func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
+        //Create a message
+        if let newMessage = commentBar.inputTextView.text {
+            
             // Create and save a new Message object
             let message = PFObject(className: "Messages")
             message["sender"] = self.currentUser!
@@ -206,16 +250,19 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
                 
                 self.conversationTable.reloadData()
+                if self.messages.count >= 1 {
+                    let indexPath = NSIndexPath(row: self.messages.count-1, section: 0)
+                    self.conversationTable.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
+                }
             }
-
+            
             if self.messages.count == 0 {
-
+                
                 // Create and save a new Chat object
                 let chat = PFObject(className: "Chats")
                 chat["users"] = [currentUser, otherUser]
                 chat["lastMessage"] = message
                 chat["messages"] = [message]
-                print(chat)
                 chat.saveInBackground { (sucess, error) in
                     if (sucess) {
                         print("New chat saved")
@@ -226,9 +273,8 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             } else {
-
+                
                 // Update the current Chat object
-                //currentChat["lastMessage"] = textField.text
                 currentChat["lastMessage"] = message
                 currentChat.add(message, forKey: "messages")
                 currentChat.saveInBackground { (success, error) in
@@ -239,9 +285,10 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             }
-//            conversationTable.reloadData()
-            textField.text = nil
         }
+        // Clear and dismiss the input bar
+        commentBar.inputTextView.text = nil
+        commentBar.inputTextView.resignFirstResponder()
     }
     
     /*

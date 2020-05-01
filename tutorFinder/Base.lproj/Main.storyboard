@@ -746,26 +746,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gpD-Zh-NBe">
-                                <rect key="frame" x="30" y="567" width="285" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="4HK-HU-dQm"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vAw-yz-Hcb">
-                                <rect key="frame" x="325" y="567" width="40" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="A9I-Sf-gHz"/>
-                                </constraints>
-                                <state key="normal" image="paperplane.fill" catalog="system"/>
-                                <connections>
-                                    <action selector="onSendMessage:" destination="rhA-QL-xx7" eventType="touchUpInside" id="Te0-bA-zKG"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2Bx-AP-S4c">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="567"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="568"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCell" rowHeight="106" id="gCt-Ii-cFR" customClass="MessageCellTableViewCell" customModule="tutorFinder" customModuleProvider="target">
@@ -819,8 +801,6 @@
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration" identifier="Message Cell"/>
                                         <connections>
-                                            <outlet property="bubbleLeadingConstraint" destination="67E-qj-5vG" id="j3Z-gy-S0d"/>
-                                            <outlet property="bubbleTrailingContraint" destination="67E-qj-5vG" id="JNW-4H-gMA"/>
                                             <outlet property="bubbleView" destination="xpJ-DD-Kiu" id="gnu-0A-II7"/>
                                             <outlet property="message" destination="jOS-H3-sA7" id="7YD-QW-ZDD"/>
                                             <outlet property="user" destination="art-8f-Tr1" id="fYU-fr-IPA"/>
@@ -832,15 +812,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="gpD-Zh-NBe" firstAttribute="top" secondItem="2Bx-AP-S4c" secondAttribute="bottom" id="8Eb-M7-txH"/>
+                            <constraint firstItem="EPR-qS-gxH" firstAttribute="bottom" secondItem="2Bx-AP-S4c" secondAttribute="bottom" priority="250" constant="350" id="1fD-6f-NeI"/>
                             <constraint firstAttribute="trailing" secondItem="2Bx-AP-S4c" secondAttribute="trailing" id="Bce-R2-G76"/>
-                            <constraint firstAttribute="trailing" secondItem="vAw-yz-Hcb" secondAttribute="trailing" constant="10" id="Maa-I2-EJf"/>
-                            <constraint firstItem="vAw-yz-Hcb" firstAttribute="top" secondItem="gpD-Zh-NBe" secondAttribute="top" id="RNP-NI-mR7"/>
+                            <constraint firstItem="EPR-qS-gxH" firstAttribute="bottom" secondItem="2Bx-AP-S4c" secondAttribute="bottom" constant="50" id="Opn-Vn-ZYm"/>
                             <constraint firstItem="2Bx-AP-S4c" firstAttribute="top" secondItem="6GS-6c-O0W" secondAttribute="top" id="TRK-eP-m0s"/>
-                            <constraint firstAttribute="bottom" secondItem="gpD-Zh-NBe" secondAttribute="bottom" constant="30" id="Uo9-up-9Hi"/>
-                            <constraint firstItem="gpD-Zh-NBe" firstAttribute="leading" secondItem="6GS-6c-O0W" secondAttribute="leading" constant="30" id="YC4-Vu-8UU"/>
-                            <constraint firstItem="vAw-yz-Hcb" firstAttribute="bottom" secondItem="gpD-Zh-NBe" secondAttribute="bottom" id="gxJ-EU-dl7"/>
-                            <constraint firstItem="vAw-yz-Hcb" firstAttribute="leading" secondItem="gpD-Zh-NBe" secondAttribute="trailing" constant="10" id="jT5-tr-KLI"/>
                             <constraint firstItem="2Bx-AP-S4c" firstAttribute="leading" secondItem="6GS-6c-O0W" secondAttribute="leading" id="wot-WR-en1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="EPR-qS-gxH"/>
@@ -858,7 +833,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="conversationTable" destination="2Bx-AP-S4c" id="xYD-XW-LY1"/>
-                        <outlet property="textField" destination="gpD-Zh-NBe" id="y3G-wu-qte"/>
+                        <outlet property="firstContraint" destination="Opn-Vn-ZYm" id="VXd-ae-Lfx"/>
+                        <outlet property="secondConstraint" destination="1fD-6f-NeI" id="Ga2-Hc-jmw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KMr-gc-0hc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1116,7 +1092,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="paperplane.fill" catalog="system" width="64" height="60"/>
         <image name="person" catalog="system" width="64" height="58"/>
         <image name="person.circle.fill" catalog="system" width="64" height="60"/>
         <image name="person.fill" catalog="system" width="64" height="60"/>
