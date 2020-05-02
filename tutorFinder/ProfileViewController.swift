@@ -18,6 +18,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var descriptionField: UITextField!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var subjectButton: UIButton!
     
     var subjects = [""]
     
@@ -74,8 +76,6 @@ class ProfileViewController: UIViewController {
                 }
             }
         }
- 
-        //self.viewDidLoad()
     }
     
     @IBAction func onLogOutButton(_ sender: Any) {
@@ -98,7 +98,6 @@ class ProfileViewController: UIViewController {
         let user = PFUser.current()
         let query = PFQuery(className:"Profiles")
         query.whereKey("author", equalTo: user as Any)
-        //let query = PFQuery.orQuery(withSubqueries: [authorQuery])
         query.getFirstObjectInBackground { (profile,error) in
             if error != nil
             {
@@ -137,6 +136,10 @@ class ProfileViewController: UIViewController {
         {
             sleep(2)
         }
+        saveButton.layer.cornerRadius = 5
+        subjectButton.layer.cornerRadius = 5
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
         let user = PFUser.current()
         let query = PFQuery(className:"Profiles")
         query.whereKey("author", equalTo: user as Any)
