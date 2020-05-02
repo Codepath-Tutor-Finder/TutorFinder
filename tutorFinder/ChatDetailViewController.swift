@@ -165,7 +165,8 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
             }
             self.conversationTable.reloadData()
             if self.messages.count >= 1 {
-                let indexPath = NSIndexPath(row: messages!.count-1, section: 0)
+                let indexPath = NSIndexPath(row: self.messages.count-1, section: 0)
+                print(indexPath)
                 self.conversationTable.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
             }
         }
@@ -252,6 +253,7 @@ class ChatDetailViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.conversationTable.reloadData()
                 if self.messages.count >= 1 {
                     let indexPath = NSIndexPath(row: self.messages.count-1, section: 0)
+                    print(indexPath)
                     self.conversationTable.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
                 }
             }
